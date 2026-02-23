@@ -1,7 +1,7 @@
 @use "mixins/media" as *;
 
 .template-collection-marcus {
-  #shopify-section-template--18241034518591__image_with_text_j7zLYt {
+  [id*="__image_with_text_j7zLYt"] {
     .site-box-container {
       > .site-box {
         &:first-child {
@@ -47,7 +47,7 @@
     }
   }
 
-  #shopify-section-template--18241034518591__rich_text_Prknyt {
+  [id*="__rich_text_Prknyt"] {
     .button {
       --main-text: #bb2826;
       --main-text-foreground: #fff;
