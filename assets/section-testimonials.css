@@ -1,0 +1,95 @@
+.box__testimonial {
+  padding-top: 0%;
+  padding-bottom: 0%;
+  min-height: 0 !important;
+}
+html[dir=rtl] .box__testimonial {
+  border-left: 0;
+}
+html[dir=ltr] .box__testimonial {
+  border-right: 0;
+}
+.box__testimonial .site-box-content {
+  padding: 0 var(--box-smaller-padding);
+}
+.box__testimonial:last-child {
+  border-bottom: none !important;
+}
+.box__testimonial .cite {
+  margin: 0;
+}
+.box__testimonial .cite span {
+  display: block;
+  opacity: 0.72;
+}
+.box__testimonial div.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  margin-bottom: 40px;
+  position: relative;
+  background: var(--main-borders);
+}
+.box__testimonial div.avatar img {
+  border-radius: 100%;
+}
+.box__testimonial div.avatar span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: calc(30px / 16 * var(--base-body-size) + 0px);
+  background: var(--main-text);
+  color: var(--main-text-foreground);
+  border-radius: 100%;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px), screen and (max-width: 1024px) and (orientation: portrait) {
+  .box__testimonial {
+    border-bottom: none !important;
+  }
+  html[dir=rtl] .box__testimonial {
+    border-left: none !important;
+  }
+  html[dir=ltr] .box__testimonial {
+    border-right: none !important;
+  }
+  .box__testimonial:last-child:after {
+    display: none;
+  }
+}
+
+/* Override 100vh min-height for testimonials section */
+.mount-testimonials .box--bigger,
+.mount-testimonials .lap--box--bigger {
+  min-height: auto !important;
+}
+
+.mount-testimonials .box--big {
+  min-height: auto !important;
+}
+
+/* Also override the heading box specifically */
+.mount-testimonials .box__heading.box--big {
+  min-height: auto !important;
+}
+
+.section-testimonials-v2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: var(--section-padding-top, 50px);
+    padding-bottom: var(--section-padding-bottom, 50px);
+}
+
+.section-testimonials-v2 .box__testimonial::before,
+.section-testimonials-v2 .box__testimonial::after {
+    background-color: transparent !important;
+}
+
+

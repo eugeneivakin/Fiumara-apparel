@@ -1,0 +1,32 @@
+{%- if image != blank -%}
+  {%- if image_alignment -%}
+    <style>
+      {%- if mobile_image != blank -%}
+        @media screen and (max-width: 749.98px) {
+          picture img {
+            object-position: {{ mobile_image.presentation.focal_point }};
+          }
+        }
+      {%- endif -%}
+      @media screen and (min-width: 750px) {
+        picture img {
+          object-position: {{ image.presentation.focal_point }};
+        }
+      }
+    </style>
+  {%- endif -%}
+  <picture>
+    {%- if mobile_image != blank -%}
+      <source
+        media="(max-width: 749.98px)"
+        srcset="
+          {%- if mobile_image.width >= 375 -%}{{ mobile_image | image_url: width: 375 }} 375w,{%- endif -%}
+          {%- if mobile_image.width >= 550 -%}{{ mobile_image | image_url: width: 550 }} 550w,{%- endif -%}
+          {%- if mobile_image.width >= 750 -%}{{ mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
+        "
+        sizes="{%- if sizes -%}{{ sizes }}{%- else -%}100vw{%- endif -%}"
+      />
+    {%- endif -%}
+    {{ image | image_url: width: 3840 | image_tag: class: image_class, sizes: '100vw', widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840' }}
+  </picture>
+{%- endif -%}

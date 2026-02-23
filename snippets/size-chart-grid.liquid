@@ -1,0 +1,1569 @@
+{%- comment -%}
+  Usage:
+  - Auto-detects vendor from product.vendor, or override via include parameter `vendor: 'sika'` etc.
+  - Supported vendor keys (slugified):
+    sockwell, sika, pro-compression, jockey, genuine-grip
+  - Renders only vendor-specific tables with internal segmentation (men/women/kids/unisex) where applicable.
+{%- endcomment -%}
+
+{%- assign chart_key = chart_id | default: section.id | default: 'chart' -%}
+{%- assign vendor_source = vendor | default: product.vendor | default: '' -%}
+{%- assign vendor_key = vendor_source | downcase | strip | replace: ' & ', ' and ' | replace: '&', 'and' | replace: '.', '' | replace: ',', '' | replace: '/', '-' | replace: '  ', ' ' | replace: ' ', '-' -%}
+
+{%- assign product_title_lower = product.title | downcase -%}
+{%- assign product_type_lower = product.type | downcase -%}
+
+{%- assign is_coat = false -%}
+{%- assign is_jacket = false -%}
+{%- assign is_pants = false -%}
+{%- assign is_shirt = false -%}
+{%- assign is_headwear = false -%}
+
+{%- if product_title_lower contains 'chef coat' or product_title_lower contains 'chef jacket' or product_type_lower contains 'chef coat' -%}
+  {%- assign is_coat = true -%}
+{%- endif -%}
+
+{%- if product_title_lower contains 'jacket' or product_type_lower contains 'jacket' -%}
+  {%- assign is_jacket = true -%}
+{%- endif -%}
+
+{%- if product_title_lower contains 'pant' or product_type_lower contains 'pant' -%}
+  {%- assign is_pants = true -%}
+{%- endif -%}
+
+{%- if product_title_lower contains 'shirt' or product_type_lower contains 'shirt' -%}
+  {%- assign is_shirt = true -%}
+{%- endif -%}
+
+{%- if product_title_lower contains 'hat' or product_title_lower contains 'cap' or product_title_lower contains 'beanie' or product_type_lower contains 'headwear' or product_type_lower contains 'hat' -%}
+  {%- assign is_headwear = true -%}
+{%- endif -%}
+
+{%- assign shared_intro = "<p><strong>MEASUREMENTS &amp; SIZES</strong>: To help you find the right fit, use the sizing guidelines below. The measurements refer to body size, not garment size—each item includes extra room for comfort and movement. For sizing questions, contact customer service at <a href='tel:1-855-348-6272' title='tel:1-855-348-6272'>1-855-348-6272</a>.</p><p><strong>MEASUREMENT GUIDELINES</strong> <em>(Stand straight and relaxed for best results)</em>:<br><strong>Chest</strong>: Measure around the fullest part of chest (arms down).<br><strong>Waist</strong>: Measure at your natural waist above the hips.<br><strong>Hips</strong>: Measure around the widest part of the hips.<br><strong>Neck</strong>: Measure around the neck at the Adam's apple.<br><strong>Inseam</strong>: Measure from the crotch to the bottom of the leg, or use a well-fitting pair of pants and measure the inside seam.</p>" -%}
+
+{%- assign footwear_intro = "<p><strong>MEASUREMENTS & SIZES</strong>: In order to find the perfect fit, we’ve provided some easy guidelines to follow. The charts below define our sizing. If you have any questions about sizing, please
+call the customer service department at <a href='tel:1-855-348-6272' title='tel:1-855-348-6272'>1-855-348-6272</a>.</p>" -%}
+
+{%- case vendor_key -%}
+  {%- when 'sockwell', 'sockwel' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro | append: '<p>The charts below define our sizing. They do not refer to the actual measurements of the garments. The garment will be larger than the body measurements in order to provide for comfortable movement.</p>'
+      assign vendor_chart_type = 'socks'
+      assign sockwell_labels = 'S/M|M/L|L/XL|XXL' | split: '|'
+      assign sockwell_women = '4-7.5|8-11||' | split: '|'
+      assign sockwell_men = '7-10|10.5-13|13.5-16|' | split: '|'
+      assign sockwell_eu = '35-38|39-43|44-47|48-50' | split: '|'
+    -%}
+
+  {%- when 'sika', 'sika-footwear' -%}
+    {%- assign vendor_intro = "<p><strong>MEASUREMENTS &amp; SIZES</strong>: To help you find the right fit, use the sizing guidelines below. The measurements refer to body size, not garment size—each item includes extra room for comfort and movement. For sizing questions, contact customer service at <a href='tel:1-855-348-6272' title='tel:1-855-348-6272'>1-855-348-6272</a>.</p>" -%}
+    {%- assign vendor_chart_type = 'footwear-multi' -%}
+    {%- assign sika_men_us = '6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½|14-14½|15-15½' | split: '|' -%}
+    {%- assign sika_men_eu = '39|40|41|42|43|44|45|46|47|48' | split: '|' -%}
+    {%- assign sika_women_us = '5-5½|6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½' | split: '|' -%}
+    {%- assign sika_women_eu = '35|36|37|38|39|40|41|42|43' | split: '|' -%}
+
+  {%- when 'pro-compression', 'procompression', 'pro compression' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro | append: '<p>The charts below define our sizing. They do not refer to the actual measurements of the garments.</p>'
+      assign vendor_chart_type = 'compression-socks'
+      assign pc_labels = 'XS|S/M|L/XL' | split: '|'
+      assign pc_women = '5-8|8-10|11-14' | split: '|'
+      assign pc_men = '5-7|8-10|11-13' | split: '|'
+      assign pc_calf = '10"-13"|13"-16"|16"-20"' | split: '|'
+    -%}
+
+  {%- when 'jockey' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro | append: '<p><strong>MEASUREMENT GUIDELINES</strong> (to get the best fit, stand straight and relax).</p>'
+      assign vendor_chart_type = 'apparel-complex'
+      assign jockey_ladies_mod_labels = 'XXS|XS|S|M|L|XL|2X|3X' | split: '|'
+      assign jockey_ladies_mod_size = '0|2-4|6-8|10-12|14-16|18-20|20w-22w|24w-26w' | split: '|'
+      assign jockey_ladies_mod_bust = '30|32|34|37|41|44|48|52' | split: '|'
+      assign jockey_ladies_mod_waist = '22|24|26|29|32|36|40|44' | split: '|'
+      assign jockey_ladies_mod_hips = '32|34|36|39|43|47|51|54' | split: '|'
+      assign jockey_ladies_class_labels = 'XXS|XS|S|M|L|XL|2X|3X|4X|5X' | split: '|'
+      assign jockey_ladies_class_size = '0|2-4|6-8|10-12|14-16|18-20|20w-22w|24w-26w|28w-30w|32w-34w' | split: '|'
+      assign jockey_ladies_class_bust = '30-31|32-33|34-36|37-39|40-42|43-46|47-50|51-54|55-58|59-62' | split: '|'
+      assign jockey_ladies_class_waist = '22-23|24-25|26-27|28-30|31-33|34-37|38-41|42-45|46-49|50-53' | split: '|'
+      assign jockey_ladies_class_hips = '32-33|34-35|36-38|39-41|42-44|45-48|49-52|53-56|57-60|61-64' | split: '|'
+      assign jockey_mens_labels = 'S|M|L|XL|2X|3X|4X' | split: '|'
+      assign jockey_mens_chest = '34-36|38-40|42-44|46-48|50-52|54-56|58-60' | split: '|'
+      assign jockey_mens_waist = '28-30|32-34|36-38|40-42|44-46|48-50|52-54' | split: '|'
+      assign jockey_unisex_labels = 'XS|S|M|L|XL|2X|3X|4X' | split: '|'
+      assign jockey_unisex_mens_chest = '30-32|34-36|38-40|42-44|46-48|50-52|54-56|58-60' | split: '|'
+      assign jockey_unisex_mens_waist = '24-26|28-30|32-34|36-38|40-42|44-46|48-50|52-54' | split: '|'
+      assign jockey_inseam_labels = 'Short|Petite|Unisex|Mens Standard|Unisex-Tall|Tall|Tall+' | split: '|'
+      assign jockey_inseam_values = '28"|29½"|31"|31"|31½"|33"|33½"' | split: '|'
+    -%}
+
+  {%- when 'genuine-grip', 'genuinegrip', 'genuine grip' -%}
+    {%- liquid
+      assign vendor_intro = footwear_intro
+      assign vendor_chart_type = 'unisex-footwear'
+      assign gg_men = '4|5|6|7|8|9|10|11|12|13|14' | split: '|'
+      assign gg_women = '6|7|8|9|10|11|12||||' | split: '|'
+    -%}
+
+  {%- when 'fiumara-apparel', 'fiumara', 'fiamara' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro
+      assign vendor_chart_type = 'note'
+      assign note_text = 'All products: One size fits all. Sizes are consistent with industry standards. See product description for details.'
+    -%}
+
+  {%- when 'bragard' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro
+      assign vendor_chart_type = 'bragard-apparel'
+      assign bragard_hats_us = '6 ⅞|7|7 ⅛|7 ¼|7 ⅜|7 ½' | split: '|'
+      assign bragard_hats_eu = '55|56|57|58|59|60' | split: '|'
+      assign bragard_wj_labels = 'XS|S|M|L|XL|2XL|3XL|4XL|5XL' | split: '|'
+      assign bragard_wj_us = '0-2|4-6|8-10|12-14|16-18|20-22|24-26|28-30|32-34' | split: '|'
+      assign bragard_wj_eu = '34|36-38|40|42-44|46-48|50-52|54||' | split: '|'
+      assign bragard_wp_labels = 'XS|S|M|L|XL|2XL|3XL|4XL|5XL' | split: '|'
+      assign bragard_wp_us = '0-2|4-6|8-10|12-14|16-18|20-22|24-26|28-30|32-34' | split: '|'
+      assign bragard_wp_eu = '34|36-38|40|42-44|46-48|50-52|54||' | split: '|'
+      assign bragard_mj_labels = 'XS|S|M|L|XL|2XL|3XL|4XL|5XL' | split: '|'
+      assign bragard_mj_us = '32|34-36|38-40|42-44|46-48|50-52|54-56|58-60|62-64' | split: '|'
+      assign bragard_mj_eu = '42|44-46|48-52|54-56|58-60|62-64|66-68|70-72|74-76' | split: '|'
+      assign bragard_mp_labels = 'XS|S|M|L|XL|2XL|3XL|4XL' | split: '|'
+      assign bragard_mp_us = '24-26|28-30|32-34|36-38|40-42|44-46|48-50|52' | split: '|'
+      assign bragard_mp_eu = '36|38-40|42-44|46-48|50-54|56-58|60-62|64' | split: '|'
+    -%}
+
+  {%- when 'birkenstock' -%}
+    {%- liquid
+      assign vendor_intro = footwear_intro
+      assign vendor_chart_type = 'birkenstock-footwear'
+      assign b_men_us = '5-5½|6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½|14-14½|15-15½|16-16½|17-17½' | split: '|'
+      assign b_men_birk = '38|39|40|41|42|43|44|45|46|47|48|49|50' | split: '|'
+      assign b_women_us = '2-2½|3-3½|4-4½|5-5½|6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½' | split: '|'
+      assign b_women_birk = '33|34|35|36|37|38|39|40|41|42|43|44' | split: '|'
+      assign b_kids_us = '7-7½|8|8½|9-9½|10-10½|11-11½|12-12½|13-13½|1-1½|2-2½|3-3½|4-4½|5-5½|6-6½' | split: '|'
+      assign b_kids_birk = '24|25|26|27|28|29|30|31|32|33|34|35|36|37' | split: '|'
+    -%}
+
+  {%- when 'landau' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro
+      assign vendor_chart_type = 'landau-apparel'
+      assign landau_labels = 'XXS|XSM|SML|MED|LGE|XLG|2XL|3XL|4XL|5XL' | split: '|'
+      assign landau_w_bust = '30-31"|32-33"|34-35"|36-37"|38-40"|41-44"|45-48"|49-52"|53-56"|57-60"' | split: '|'
+      assign landau_w_waist = '22-23"|24-25"|26-27"|28-30"|31-33"|34-37"|39-41"|42-45"|46-49"|50-53"' | split: '|'
+      assign landau_w_hip = '32-33"|34-35"|36-37"|38-40"|41-43"|44-47"|48-51"|52-55"|56-59"|60-63"' | split: '|'
+      assign landau_m_chest = '30-32"|34-36"|38-40"|42-44"|46-48"|50-52"|54-56"|58-60"|62-64"' | split: '|'
+      assign landau_m_waist = '24-26"|28-30"|32-34"|36-38"|40-42"|44-46"|48-50"|52-54"|56-58"' | split: '|'
+      assign landau_u_labels = 'XSM|SML|MED|LGE|XLG|2XL|3XL|4XL|5XL' | split: '|'
+      assign landau_u_chest = '30-32"|34-36"|38-40"|42-44"|46-48"|50-52"|54-56"|58-60"|62-64"' | split: '|'
+      assign landau_u_waist = '24-26"|28-30"|32-34"|42-44"|46-48"|50-52"|54-56"|58-60"|62-64"' | split: '|'
+      assign landau_u_hip = '34-35"|36-38"|39-41"|42-45"|46-49"|50-53"|54-57"|58-61"|62-65"' | split: '|'
+    -%}
+
+  {%- when 'kentaur' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro | append: '<p><em>Note: all sizes below are in centimeters (cm).</em></p>'
+      assign vendor_chart_type = 'kentaur-metric'
+      assign kentaur_w_labels = '34|36|38|40|42|44|46|48|50|52|54|56' | split: '|'
+      assign kentaur_w_chest = '80|84|88|92|96|100|106|112|118|124|130|136' | split: '|'
+      assign kentaur_w_waist = '62|66|70|74|78|82|88|94|100|106|112|118' | split: '|'
+      assign kentaur_w_hip = '86|90|94|98|102|106|112|118|124|130|136|142' | split: '|'
+      assign kentaur_m_labels = '44|46|48|50|52|54|56|58|60|62|64|66' | split: '|'
+      assign kentaur_m_chest = '88|92|96|100|104|108|112|116|120|124|128|132' | split: '|'
+      assign kentaur_m_waist = '76|80|84|88|92|96|100|104|108|112|116|120' | split: '|'
+      assign kentaur_mt_labels = '40|42|44|46|48|50|52|54|56|58|60|62|64|66' | split: '|'
+      assign kentaur_mt_waist = '68|72|76|80|84|88|92|96|100|104|108|112|116|120' | split: '|'
+      assign kentaur_mt_hip = '83|87|91|95|99|103|107|111|115|119|123|127|131|135' | split: '|'
+    -%}
+
+  {%- when 'meta' -%}
+    {%- liquid
+      assign vendor_intro = shared_intro
+      assign vendor_chart_type = 'meta-apparel'
+      assign meta_m_labels = 'XXS|XS|S|M|L|XL|2X|3X|4X|5X' | split: '|'
+      assign meta_m_chest = '26-28|30-32|34-36|38-40|42-44|46-48|50-52|54-56|58-60|62-64' | split: '|'
+      assign meta_m_waist = '20-22|24-26|28-30|32-34|36-38|40-42|44-46|48-50|52-54|56-58' | split: '|'
+      assign meta_u_labels = 'XXS|XS|S|M|L|XL|2X|3X|4X|5X|6X|7X' | split: '|'
+      assign meta_u_mens = '26-28|30-32|34-36|38-40|42-44|46-48|50-52|54-56|58-60|62-64|66-68|70-72' | split: '|'
+      assign meta_u_ladies = '0-2|4-6|8-10|12-14|16-18|20w|22w-24w|26w-28w|30w-32w|34w-36w|38w-40w|42w-44w' | split: '|'
+    -%}
+
+  {%- when 'giasco' -%}
+    {%- liquid
+      assign vendor_intro = footwear_intro
+      assign vendor_chart_type = 'giasco-footwear'
+      assign giasco_w_us = '4|5|6|7|8|9|10|11|12' | split: '|'
+      assign giasco_w_eu = '36|37|38|39|40|41|42|43|44' | split: '|'
+      assign giasco_m_us = '4|5|6|7|8|9|10|11|12' | split: '|'
+      assign giasco_m_eu = '38|39|40|41|42|43|44|45|46' | split: '|'
+    -%}
+
+  {%- when 'chef-works', 'chefworks', 'chef works', "chef's works" -%}
+    {%- liquid
+      assign vendor_intro = "<p><strong>MEASUREMENTS &amp; SIZES</strong>: To help you find the right fit, use the sizing guidelines below. The measurements refer to body size, not garment size—each item includes extra room for comfort and movement. For sizing questions, contact customer service at <a href='tel:1-855-348-6272' title='tel:1-855-348-6272'>1-855-348-6272</a>.</p><p><strong>MEASUREMENT GUIDELINES</strong> <em>(Stand straight and relaxed for best results)</em>:<br><strong>Chest</strong>: Measure around the fullest part of chest (arms down).<br><strong>Waist</strong>: Measure at your natural waist above the hips.<br><strong>Hips</strong>: Measure around the widest part of the hips.<br><strong>Neck</strong>: Measure around the neck at the Adam's apple.<br><strong>Inseam</strong>: Measure from the crotch to the bottom of the leg, or use a well-fitting pair of pants and measure the inside seam.</p>"
+      assign vendor_chart_type = 'chef-works-apparel'
+      assign cw_basic_labels = 'XS|S|M|L|XL|2XL|3XL|4XL|5XL' | split: '|'
+      assign cw_basic_chest_in = '32-34|36-38|40-42|44-46|48-50|52-54|56-58|60-62|64-66' | split: '|'
+      assign cw_basic_back_in = '29|30|31|31½|32|33|33|33|33' | split: '|'
+      assign cw_basic_chest_cm = '82-87|92-97|102-107|112-117|122-127|132-137|142-147|153-158|159-167' | split: '|'
+      assign cw_basic_back_cm = '74|76|78|80|82|84|84|84|84' | split: '|'
+      assign cw_womens_exec_labels = 'XS|S|M|L|XL|2XL' | split: '|'
+      assign cw_womens_exec_chest_in = '32-34|36-38|40-42|44-46|48-50|52-54' | split: '|'
+      assign cw_dress_labels = 'XS|S|M|L|XL|2XL|3XL' | split: '|'
+      assign cw_dress_mens = '34-36|38-40|42-44|46-48|50-52|54-56|' | split: '|'
+      assign cw_dress_womens = '2|4-6|8-10|12-14|16-18|20-22|22-24' | split: '|'
+      assign cw_dress_collar_in = '13-13.5|14-14.5|15-15.5|16-16.5|17-17.5|18-18.5|19-19.5' | split: '|'
+      assign cw_mpants_labels = 'XS|S|M|L|XL|2XL|3XL|4XL' | split: '|'
+      assign cw_mpants_waist_in = '26-28|30-32|34-36|38-40|42-44|46-48|50-52|54-58' | split: '|'
+      assign cw_mpants_inseam_in = '31.5|31.5|32|32|32|32|32|32' | split: '|'
+      assign cw_mpants_waist_cm = '65-73|76-82|85-92|95-102|105-112|116-124|126-134|137-142' | split: '|'
+      assign cw_mpants_inseam_cm = '80|80|81|81.5|81.5|81.5|81.5|81.5' | split: '|'
+      assign cw_wpants_labels = 'XS|S|M|L|XL|2XL|3XL' | split: '|'
+      assign cw_wpants_size = '3-4|5-6|7-8|9-10|11-12|13-14|15-16' | split: '|'
+      assign cw_wpants_waist_in = '26-28|30-32|34-36|38-40|42-44|46-48|50-52' | split: '|'
+      assign cw_wpants_hip_in = '34-35|36-37|38-39|40-41|42-43|44-45|46-47' | split: '|'
+      assign cw_wpants_inseam_in = '31.5|31.5|31.5|32.25|32.25|32.25|32.25' | split: '|'
+      assign cw_wpants_waist_cm = '65-73|76-82|85-92|95-102|105-112|116-124|126-134' | split: '|'
+      assign cw_wpants_hip_cm = '87-89|92-94|97-99|102-104|107-109|112-114|117-119' | split: '|'
+      assign cw_wpants_inseam_cm = '80|80|80|82|82|82|82' | split: '|'
+      assign cw_cafe_labels = 'XS|S|M|L|XL|2XL|3XL|4XL|5XL' | split: '|'
+      assign cw_cafe_chest_in = '37|41|45|49|53|55|60.5|63|65.5' | split: '|'
+      assign cw_cafe_chest_cm = '94|104|114|124|134|140|154|160|166' | split: '|'
+      assign cw_female_labels = 'XS|S|M|L|XL|2XL' | split: '|'
+      assign cw_female_chest_in = '36|38|40|42|44|47' | split: '|'
+      assign cw_female_back_in = '26|26|27|27|27.5|28' | split: '|'
+      assign cw_female_chest_cm = '91|96|101|106|111|121' | split: '|'
+      assign cw_female_back_cm = '66|67|68|69|70|71' | split: '|'
+    -%}
+
+  {%- when 'sanita' -%}
+    {%- liquid
+      assign vendor_intro = footwear_intro
+      assign vendor_chart_type = 'sanita-footwear'
+      assign sanita_w_us = '5|5.5/6|6.5|7/7.5|8/8.5|9/9.5|10|10.5/11|12' | split: '|'
+      assign sanita_w_eu = '35|36|37|38|39|40|41|42|43' | split: '|'
+      assign sanita_m_us = '7|7.5/8|8.5/9|9.5|10/10.5|11|11.5/12|13|14' | split: '|'
+      assign sanita_m_eu = '40|41|42|43|44|45|46|47|48' | split: '|'
+    -%}
+
+  {%- when 'le-nouveau', 'le nouveau', 'lenouveauchef', 'le nouveau chef' -%}
+    {%- liquid
+      assign vendor_intro = "<p><strong>MEASUREMENTS &amp; SIZES</strong>: To help you find the right fit, use the sizing guidelines below. The measurements refer to body size, not garment size—each item includes extra room for comfort and movement. For sizing questions, contact customer service at <a href='tel:1-855-348-6272' title='tel:1-855-348-6272'>1-855-348-6272</a>.</p><p><strong>MEASUREMENT GUIDELINES</strong> <em>(Stand straight and relaxed for best results)</em>:<br><strong>Chest</strong>: Measure around the fullest part of chest (arms down).<br><strong>Waist</strong>: Measure at your natural waist above the hips.<br><strong>Hips</strong>: Measure around the widest part of the hips.<br><strong>Neck</strong>: Measure around the neck at the Adam's apple.<br><strong>Inseam</strong>: Measure from the crotch to the bottom of the leg, or use a well-fitting pair of pants and measure the inside seam.</p>"
+      assign vendor_chart_type = 'le-nouveau-apparel'
+      assign ln_w_ukus = '4|6|8|10|12|14|16|18|20' | split: '|'
+      assign ln_w_eu = '32|34|36|38|40|42|44|46|48' | split: '|'
+      assign ln_w_general = 'XXS|XS|S|M|L|XL|XXL|3XL|4XL' | split: '|'
+      assign ln_w_our = 'XXS|XS|S|M|L|XL|XXL|3XL|4XL' | split: '|'
+      assign ln_m_ukus = '36|38-40|42|44|46|48|50|52|54|56' | split: '|'
+      assign ln_m_eu = '46|48-50|52|54|56|58|60|62|64|66' | split: '|'
+      assign ln_m_general = 'S|M|L|XL|XXL|3XL|4XL|5XL|6XL|7XL' | split: '|'
+      assign ln_m_our = 'XS|S|M|L|XL|XXL|3XL|4XL|5XL|6XL' | split: '|'
+    -%}
+
+  {%- else -%}
+    {%- liquid
+      assign vendor_intro = ''
+      assign vendor_chart_type = ''
+    -%}
+{%- endcase -%}
+
+{%- if vendor_chart_type != blank -%}
+  {%- if vendor_intro != blank -%}
+    <div class="size-chart-panel__text rte">{{ vendor_intro }}</div>
+  {%- endif -%}
+
+  <div class="size-chart-grid size-chart-grid--vendor" data-vendor="{{ vendor_key }}">
+    <div class="size-chart-grid__measurements">
+      {%- if vendor_chart_type == 'socks' -%}
+        {%- if gender == 'women' or gender == 'men' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}">
+              <span class="size-chart-grid__measurement-label">Socks</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ sockwell_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading" role="columnheader">Size</span>
+                  {%- for l in sockwell_labels -%}
+                    <span role="columnheader">{{ l }}</span>
+                  {%- endfor -%}
+                </div>
+                {%- if gender == 'women' -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="rowheader">Women</span>
+                    {%- for v in sockwell_women -%}
+                      <span role="cell" class="size-chart-grid__value">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+                {%- if gender == 'men' -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="rowheader">Men</span>
+                    {%- for v in sockwell_men -%}
+                      <span role="cell" class="size-chart-grid__value">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading" role="rowheader">EU</span>
+                  {%- for v in sockwell_eu -%}
+                    <span role="cell" class="size-chart-grid__value">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'footwear-multi' -%}
+        {%- if gender == 'men' or gender == 'women' -%}
+          {%- if gender == 'men' -%}
+            {%- assign fw_us = sika_men_us -%}
+            {%- assign fw_eu = sika_men_eu -%}
+            {%- assign fw_label = 'Footwear Men' -%}
+          {%- else -%}
+            {%- assign fw_us = sika_women_us -%}
+            {%- assign fw_eu = sika_women_eu -%}
+            {%- assign fw_label = 'Footwear Women' -%}
+          {%- endif -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-{{ gender }}" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-{{ gender }}">
+              <span class="size-chart-grid__measurement-label">{{ fw_label }}</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ fw_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading" role="columnheader">US/Canada</span>
+                  {%- for v in fw_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading" role="rowheader">European</span>
+                  {%- for v in fw_eu -%}
+                    <span role="cell" class="size-chart-grid__value">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'compression-socks' -%}
+        {%- if gender == 'women' or gender == 'men' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}">
+              <span class="size-chart-grid__measurement-label">Compression Socks</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ pc_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading" role="columnheader">Size</span>
+                  {%- for v in pc_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                {%- if gender == 'women' -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="rowheader">Women</span>
+                    {%- for v in pc_women -%}
+                      <span role="cell" class="size-chart-grid__value">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+                {%- if gender == 'men' -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="rowheader">Men</span>
+                    {%- for v in pc_men -%}
+                      <span role="cell" class="size-chart-grid__value">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading" role="rowheader">Calf Size</span>
+                  {%- for v in pc_calf -%}
+                    <span role="cell" class="size-chart-grid__value">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'apparel-complex' -%}
+        {%- if gender == 'women' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-ladies-modern" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-ladies-modern">
+              <span class="size-chart-grid__measurement-label">Ladies Modern</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ jockey_ladies_mod_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in jockey_ladies_mod_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Numeric</span>
+                  {%- for v in jockey_ladies_mod_size -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Bust</span>
+                  {%- for v in jockey_ladies_mod_bust -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in jockey_ladies_mod_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Hips</span>
+                  {%- for v in jockey_ladies_mod_hips -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-ladies-classic" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-ladies-classic">
+              <span class="size-chart-grid__measurement-label">Ladies Classic</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ jockey_ladies_class_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in jockey_ladies_class_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Numeric</span>
+                  {%- for v in jockey_ladies_class_size -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Bust</span>
+                  {%- for v in jockey_ladies_class_bust -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in jockey_ladies_class_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Hips</span>
+                  {%- for v in jockey_ladies_class_hips -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if gender == 'men' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-mens" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-mens">
+              <span class="size-chart-grid__measurement-label">Men</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ jockey_mens_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in jockey_mens_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Chest</span>
+                  {%- for v in jockey_mens_chest -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in jockey_mens_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if gender == 'men' or gender == 'women' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-unisex" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-unisex">
+              <span class="size-chart-grid__measurement-label">Unisex</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ jockey_unisex_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in jockey_unisex_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Men's Chest</span>
+                  {%- for v in jockey_unisex_mens_chest -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Men's Waist</span>
+                  {%- for v in jockey_unisex_mens_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-inseam" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-inseam">
+              <span class="size-chart-grid__measurement-label">Inseam</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ jockey_inseam_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  {%- for v in jockey_inseam_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  {%- for v in jockey_inseam_values -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'unisex-footwear' -%}
+        {%- if gender == 'men' or gender == 'women' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}">
+              <span class="size-chart-grid__measurement-label">Unisex Footwear</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ gg_men.size }}">
+                {%- if gender == 'men' -%}
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Men - U.S. Size</span>
+                    {%- for v in gg_men -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+                {%- if gender == 'women' -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Women - U.S. Size</span>
+                    {%- for v in gg_women -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'note' -%}
+        <div class="size-chart-grid__measurement">
+          <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}" checked>
+          <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}">
+            <span class="size-chart-grid__measurement-label">Apparel</span>
+          </label>
+          <div class="size-chart-grid__measurement-body" aria-hidden="false">
+            <div class="size-chart-panel__text rte">{{ note_text }}</div>
+          </div>
+        </div>
+
+      {%- elsif vendor_chart_type == 'bragard-apparel' -%}
+        {%- if is_headwear -%}
+          {%- if gender == 'men' or gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-hats" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-hats">
+                <span class="size-chart-grid__measurement-label">Hats / Toques</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ bragard_hats_us.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">U.S.</span>
+                    {%- for v in bragard_hats_us -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">EU</span>
+                    {%- for v in bragard_hats_eu -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if is_coat or is_jacket -%}
+          {%- if gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-jackets" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-jackets">
+                <span class="size-chart-grid__measurement-label">Women's Jackets</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ bragard_wj_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in bragard_wj_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">U.S.</span>
+                    {%- for v in bragard_wj_us -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">EU</span>
+                    {%- for v in bragard_wj_eu -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if is_pants -%}
+          {%- if gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-pants" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-pants">
+                <span class="size-chart-grid__measurement-label">Women's Pants</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ bragard_wp_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in bragard_wp_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">U.S.</span>
+                    {%- for v in bragard_wp_us -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">EU</span>
+                    {%- for v in bragard_wp_eu -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if is_coat or is_jacket -%}
+          {%- if gender == 'men' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-jackets" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-jackets">
+                <span class="size-chart-grid__measurement-label">Men's Jackets</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ bragard_mj_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in bragard_mj_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">U.S.</span>
+                    {%- for v in bragard_mj_us -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">EU</span>
+                    {%- for v in bragard_mj_eu -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if is_pants -%}
+          {%- if gender == 'men' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-pants" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-pants">
+                <span class="size-chart-grid__measurement-label">Men's Pants</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ bragard_mp_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in bragard_mp_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">U.S.</span>
+                    {%- for v in bragard_mp_us -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">EU</span>
+                    {%- for v in bragard_mp_eu -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'birkenstock-footwear' -%}
+        {%- if gender == 'men' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-men" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-men">
+              <span class="size-chart-grid__measurement-label">Men's Footwear</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ b_men_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">U.S. Size</span>
+                  {%- for v in b_men_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Birkenstock</span>
+                  {%- for v in b_men_birk -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- elsif gender == 'women' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-women" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-women">
+              <span class="size-chart-grid__measurement-label">Women's Footwear</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ b_women_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">U.S. Size</span>
+                  {%- for v in b_women_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Birkenstock</span>
+                  {%- for v in b_women_birk -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- elsif gender == 'kids' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-kids" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-kids">
+              <span class="size-chart-grid__measurement-label">Kids Footwear</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ b_kids_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">U.S. Size</span>
+                  {%- for v in b_kids_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Birkenstock</span>
+                  {%- for v in b_kids_birk -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'landau-apparel' -%}
+        {%- if gender == 'women' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-women" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-women">
+              <span class="size-chart-grid__measurement-label">Women's</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ landau_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in landau_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Bust</span>
+                  {%- for v in landau_w_bust -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in landau_w_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Hip</span>
+                  {%- for v in landau_w_hip -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- elsif gender == 'men' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-men" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-men">
+              <span class="size-chart-grid__measurement-label">Men's</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ landau_m_chest.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Chest</span>
+                  {%- for v in landau_m_chest -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in landau_m_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="size-chart-grid__measurement">
+          <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-unisex" checked>
+          <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-unisex">
+            <span class="size-chart-grid__measurement-label">Unisex</span>
+          </label>
+          <div class="size-chart-grid__measurement-body" aria-hidden="false">
+            <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ landau_u_labels.size }}">
+              <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <span class="size-chart-grid__row-heading">Size</span>
+                {%- for v in landau_u_labels -%}
+                  <span role="columnheader">{{ v }}</span>
+                {%- endfor -%}
+              </div>
+              <div class="size-chart-grid__row" role="row">
+                <span class="size-chart-grid__row-heading">Chest</span>
+                {%- for v in landau_u_chest -%}
+                  <span role="cell">{{ v }}</span>
+                {%- endfor -%}
+              </div>
+              <div class="size-chart-grid__row" role="row">
+                <span class="size-chart-grid__row-heading">Waist</span>
+                {%- for v in landau_u_waist -%}
+                  <span role="cell">{{ v }}</span>
+                {%- endfor -%}
+              </div>
+              <div class="size-chart-grid__row" role="row">
+                <span class="size-chart-grid__row-heading">Hip</span>
+                {%- for v in landau_u_hip -%}
+                  <span role="cell">{{ v }}</span>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {%- elsif vendor_chart_type == 'kentaur-metric' -%}
+        {%- if gender == 'women' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-women" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-women">
+              <span class="size-chart-grid__measurement-label">Women's Wear</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ kentaur_w_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in kentaur_w_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Chest</span>
+                  {%- for v in kentaur_w_chest -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in kentaur_w_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Hip</span>
+                  {%- for v in kentaur_w_hip -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- elsif gender == 'men' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-tops" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-tops">
+              <span class="size-chart-grid__measurement-label">Men's Tops</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ kentaur_m_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in kentaur_m_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Chest</span>
+                  {%- for v in kentaur_m_chest -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in kentaur_m_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-trousers" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-trousers">
+              <span class="size-chart-grid__measurement-label">Men's Trousers</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ kentaur_mt_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in kentaur_mt_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in kentaur_mt_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Hip</span>
+                  {%- for v in kentaur_mt_hip -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'meta-apparel' -%}
+        {%- if gender == 'men' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-mens" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-mens">
+              <span class="size-chart-grid__measurement-label">Men's</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ meta_m_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in meta_m_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Chest</span>
+                  {%- for v in meta_m_chest -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Waist</span>
+                  {%- for v in meta_m_waist -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if gender == 'men' or gender == 'women' -%}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-unisex" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-unisex">
+              <span class="size-chart-grid__measurement-label">Unisex</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ meta_u_labels.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in meta_u_labels -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Men</span>
+                  {%- for v in meta_u_mens -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Ladies</span>
+                  {%- for v in meta_u_ladies -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'giasco-footwear' -%}
+        {%- if gender == 'women' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-women" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-women">
+              <span class="size-chart-grid__measurement-label">Ladies Footwear</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ giasco_w_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">U.S.</span>
+                  {%- for v in giasco_w_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">EU</span>
+                  {%- for v in giasco_w_eu -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-men" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-men">
+              <span class="size-chart-grid__measurement-label">Men's Footwear</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ giasco_m_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">U.S.</span>
+                  {%- for v in giasco_m_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">EU</span>
+                  {%- for v in giasco_m_eu -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'sanita-footwear' -%}
+        {%- if gender == 'women' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-women" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-women">
+              <span class="size-chart-grid__measurement-label">Women's</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ sanita_w_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">U.S.</span>
+                  {%- for v in sanita_w_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Sanita</span>
+                  {%- for v in sanita_w_eu -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- elsif gender == 'men' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-men" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-men">
+              <span class="size-chart-grid__measurement-label">Men's</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ sanita_m_us.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">U.S.</span>
+                  {%- for v in sanita_m_us -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Sanita</span>
+                  {%- for v in sanita_m_eu -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'le-nouveau-apparel' -%}
+        {%- if gender == 'women' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-women" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-women">
+              <span class="size-chart-grid__measurement-label">Women</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ ln_w_ukus.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">UK/US</span>
+                  {%- for v in ln_w_ukus -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">EU</span>
+                  {%- for v in ln_w_eu -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">General</span>
+                  {%- for v in ln_w_general -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Our Size</span>
+                  {%- for v in ln_w_our -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- elsif gender == 'men' %}
+          <div class="size-chart-grid__measurement">
+            <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-men" checked>
+            <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-men">
+              <span class="size-chart-grid__measurement-label">Men</span>
+            </label>
+            <div class="size-chart-grid__measurement-body" aria-hidden="false">
+              <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ ln_m_ukus.size }}">
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">UK/US</span>
+                  {%- for v in ln_m_ukus -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">EU</span>
+                  {%- for v in ln_m_eu -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">General</span>
+                  {%- for v in ln_m_general -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">Our Size</span>
+                  {%- for v in ln_m_our -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+      {%- elsif vendor_chart_type == 'chef-works-apparel' -%}
+        {%- if is_coat or is_jacket %}
+          {%- if gender == 'men' or gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-basic-coats" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-basic-coats">
+                <span class="size-chart-grid__measurement-label">Basic/Executive Chef Coats &amp; Jackets</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ cw_basic_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Unisex Size</span>
+                    {%- for v in cw_basic_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Unisex Chest (in)</span>
+                    {%- for v in cw_basic_chest_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Center Back Length (in)</span>
+                    {%- for v in cw_basic_back_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Unisex Chest (cm)</span>
+                    {%- for v in cw_basic_chest_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Center Back Length (cm)</span>
+                    {%- for v in cw_basic_back_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-exec" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-exec">
+                <span class="size-chart-grid__measurement-label">Women's Executive Coats</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ cw_womens_exec_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in cw_womens_exec_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Chest (in)</span>
+                    {%- for v in cw_womens_exec_chest_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if is_shirt %}
+          {%- if gender == 'men' or gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-dress-shirts" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-dress-shirts">
+                <span class="size-chart-grid__measurement-label">Dress &amp; Banded Collar Shirts</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ cw_dress_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in cw_dress_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  {%- if gender == 'men' -%}
+                    <div class="size-chart-grid__row" role="row">
+                      <span class="size-chart-grid__row-heading">Men's</span>
+                      {%- for v in cw_dress_mens -%}
+                        <span role="cell">{{ v }}</span>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                  {%- if gender == 'women' -%}
+                    <div class="size-chart-grid__row" role="row">
+                      <span class="size-chart-grid__row-heading">Women's</span>
+                      {%- for v in cw_dress_womens -%}
+                        <span role="cell">{{ v }}</span>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Collar (in)</span>
+                    {%- for v in cw_dress_collar_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if is_pants %}
+          {%- if gender == 'men' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-pants" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-mens-pants">
+                <span class="size-chart-grid__measurement-label">Men's Pants</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ cw_mpants_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in cw_mpants_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Waist (in)</span>
+                    {%- for v in cw_mpants_waist_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Inseam (in)</span>
+                    {%- for v in cw_mpants_inseam_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Waist (cm)</span>
+                    {%- for v in cw_mpants_waist_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Inseam (cm)</span>
+                    {%- for v in cw_mpants_inseam_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-pants" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-womens-pants">
+                <span class="size-chart-grid__measurement-label">Women's Pants</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ cw_wpants_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in cw_wpants_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in cw_wpants_size -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Waist (in)</span>
+                    {%- for v in cw_wpants_waist_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Hip (in)</span>
+                    {%- for v in cw_wpants_hip_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Inseam (in)</span>
+                    {%- for v in cw_wpants_inseam_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Waist (cm)</span>
+                    {%- for v in cw_wpants_waist_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Hip (cm)</span>
+                    {%- for v in cw_wpants_hip_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Inseam (cm)</span>
+                    {%- for v in cw_wpants_inseam_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if is_shirt %}
+          {%- if gender == 'men' or gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-cafe-shirts" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-cafe-shirts">
+                <span class="size-chart-grid__measurement-label">Cafe, Kitchen &amp; Universal Shirts</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ cw_cafe_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Unisex Size</span>
+                    {%- for v in cw_cafe_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Unisex Chest (in)</span>
+                    {%- for v in cw_cafe_chest_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Unisex Chest (cm)</span>
+                    {%- for v in cw_cafe_chest_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if gender == 'women' -%}
+            <div class="size-chart-grid__measurement">
+              <input class="size-chart-grid__accordion" type="checkbox" id="size-chart-{{ chart_key }}-{{ vendor_key }}-female-shirts" checked>
+              <label class="size-chart-grid__measurement-toggle" for="size-chart-{{ chart_key }}-{{ vendor_key }}-female-shirts">
+                <span class="size-chart-grid__measurement-label">Female Universal Shirts</span>
+              </label>
+              <div class="size-chart-grid__measurement-body" aria-hidden="false">
+                <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ cw_female_labels.size }}">
+                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                    <span class="size-chart-grid__row-heading">Size</span>
+                    {%- for v in cw_female_labels -%}
+                      <span role="columnheader">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Chest (in)</span>
+                    {%- for v in cw_female_chest_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Center Back Length (in)</span>
+                    {%- for v in cw_female_back_in -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Chest (cm)</span>
+                    {%- for v in cw_female_chest_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading">Center Back Length (cm)</span>
+                    {%- for v in cw_female_back_cm -%}
+                      <span role="cell">{{ v }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- else -%}
+  <div class="size-chart-panel__text rte">
+    {%- if is_footwear -%}
+      {{ footwear_intro }}
+    {%- else -%}
+      <p><strong>MEASUREMENTS & SIZES</strong>: In order to find the perfect fit, we've provided some easy guidelines to follow. The charts below define our sizing. If you have any questions about sizing, please call the customer service department at <a href="tel:1-855-348-6272" title="tel:1-855-348-6272">1-855-348-6272</a>.</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

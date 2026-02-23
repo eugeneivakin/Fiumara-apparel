@@ -1,0 +1,229 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_with_text_j7zLYt": {
+      "type": "image-with-text",
+      "blocks": {
+        "image_cqARPr": {
+          "type": "image",
+          "settings": {
+            "subtitle": "Professional Chef Wear at Work",
+            "title": "Lielle Capsule Collection",
+            "button_label": "",
+            "url": "",
+            "image": "shopify://shop_images/Untitled-3_2.png",
+            "mobile_image": "shopify://shop_images/Mobile.png",
+            "custom_text": "rgba(0,0,0,0)",
+            "custom_overlay": "rgba(0,0,0,0)",
+            "seo_h_tag": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "image_cqARPr"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image_height": "half",
+        "text_alignment": "horizontal-center vertical-middle",
+        "image_height_mobile": "full",
+        "text_alignment_mobile": "horizontal-center vertical-middle"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "show_collection_banner": true,
+        "collection_desktop_layout": "split",
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "mobile_overlay_background": "rgba(0,0,0,0)",
+        "mobile_overlay_text": "#262221",
+        "collection_rows": 8,
+        "enable_filtering": true,
+        "enable_sorting": true,
+        "image_filter_layout": "onecolumn"
+      }
+    },
+    "navigation": {
+      "type": "main-collection-navigation",
+      "disabled": true,
+      "settings": {
+        "navigation_style": "2",
+        "navigation_images": false,
+        "custom_text": "rgba(0,0,0,0)",
+        "custom_overlay": "rgba(0,0,0,0)"
+      }
+    },
+    "image_with_text_4kzxqt": {
+      "type": "image-with-text",
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image_height": "half",
+        "text_alignment": "horizontal-center vertical-middle",
+        "image_height_mobile": "half",
+        "text_alignment_mobile": "horizontal-center vertical-middle"
+      }
+    },
+    "rich_text_Prknyt": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_rQ7V6m": {
+          "type": "heading",
+          "settings": {
+            "heading": "Chef's Choice: Kentaur Workwear of Denmark",
+            "seo_h_tag": "h3"
+          }
+        },
+        "text_X3nHBk": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Danish Sustainable Design for Culinary Professionals</strong></p><p>Kentaur Workwear of Denmark is globally recognized for its expertise in <strong>premium chef uniforms and hospitality apparel</strong>. Known for clean lines, ergonomic tailoring, and sustainable production standards, Kentaur blends heritage craftsmanship with modern innovation. The Lielle Capsule Collection includes:</p><ul><li><strong>Modern chef coats</strong> with tailored silhouettes and breathable fabrics</li><li><strong>Professional chef shirts</strong> designed for comfort and versatility</li><li><strong>Functional aprons</strong> engineered for durability, mobility, and practical storage</li></ul><p>Each piece reflects the values of both Kentaur and Lielle: thoughtful design, lasting quality, and professional performance.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_rQ7V6m",
+        "text_X3nHBk"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "title": "",
+        "btn_label": "Shop all Kentaur styles",
+        "btn_url": "https://fiumaraculinary.com/collections/kentaur-workwear-of-denmark",
+        "bg_img": "shopify://shop_images/IMG_2613_1.jpg",
+        "desktop_image_positioning": "image-on-left",
+        "bg_overlay": false,
+        "enable_parallax": false,
+        "custom_background": "rgba(0,0,0,0)",
+        "custom_text": "#000000",
+        "seo_h_tag": "h2",
+        "custom_position_content": true,
+        "position_content": "center",
+        "custom_paddings": true,
+        "padding_top": 120,
+        "padding_bottom": 120,
+        "padding_top_mb": 80,
+        "padding_bottom_mb": 80
+      }
+    },
+    "image_with_text_EtaRfJ": {
+      "type": "image-with-text",
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image_height": "half",
+        "text_alignment": "horizontal-center vertical-middle",
+        "image_height_mobile": "half",
+        "text_alignment_mobile": "horizontal-center vertical-middle"
+      }
+    },
+    "text_columns_with_icons_np6yzQ": {
+      "type": "text-columns-with-icons",
+      "blocks": {
+        "text_icon_KzWPkF": {
+          "type": "text-icon",
+          "settings": {
+            "title": "Bulk Order Discounts",
+            "body": "<p>Get up to 25% off culinary workwear when you order in bulk.</p>",
+            "label": "LEARN MORE",
+            "link": "https://fiumaraculinary.com/pages/business-accounts",
+            "select_icon": "currency"
+          }
+        },
+        "text_icon_ByceYw": {
+          "type": "text-icon",
+          "settings": {
+            "title": "Custom Embroidery",
+            "body": "<p>Give your culinary apparel the personal touch it deserves.</p>",
+            "label": "Get A Quote",
+            "link": "shopify://pages/custom-embroidery",
+            "select_icon": "label"
+          }
+        }
+      },
+      "block_order": [
+        "text_icon_KzWPkF",
+        "text_icon_ByceYw"
+      ],
+      "custom_css": [
+        ".h4 {font-size: calc(30px / 60 * var(--base-headings-size) + 0px);}"
+      ],
+      "settings": {
+        "section_padding": 30,
+        "icon_size": 64,
+        "heading_font_size": 24,
+        "custom_background": "rgba(0,0,0,0)",
+        "custom_text": "rgba(0,0,0,0)",
+        "seo_h_tag": "h2"
+      }
+    },
+    "contact_form_CK4Gfp": {
+      "type": "contact-form",
+      "blocks": {
+        "custom_html_pQTXVp": {
+          "type": "custom_html",
+          "settings": {
+            "custom_html_content": "<div style=\"max-width: 200px;\npadding: 0 0 20px 15px;\nwidth: 100%;\">\n<img style=\"border: 1px solid var(--grid-borders);\" alt=\"Fiumara Culinary - Guide to Premium Workwear\" src=\"https://cdn.shopify.com/s/files/1/0116/8492/files/Fiumara-Culinary-Guide-To-Premium-Workwear.jpg\">\n</div>"
+          }
+        },
+        "title_YdB8jR": {
+          "type": "title",
+          "settings": {
+            "title": "Discover the 5 mistakes chefs make when choosing new apparel and how to avoid them."
+          }
+        },
+        "email_ewcxTN": {
+          "type": "email",
+          "disabled": true,
+          "settings": {}
+        },
+        "button_xKTX4U": {
+          "type": "button",
+          "disabled": true,
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "custom_html_pQTXVp",
+        "title_YdB8jR",
+        "email_ewcxTN",
+        "button_xKTX4U"
+      ],
+      "custom_css": [
+        ".site-box-container:not(.remove-background) {background: url(https://cdn.shopify.com/s/files/1/0116/8492/files/Fiumara-Culinary-ISP-2164900943-2560x1440.jpg); background-size: cover;}",
+        ".title.h1 {font-size: 23px; font-weight: 400;}",
+        "@media screen and (min-width: 768px) {.title.h1 {font-size: 38px; }}"
+      ],
+      "settings": {
+        "title": "Free Guide to Premium Workwear",
+        "map_enable": false,
+        "map_address": "",
+        "map_api": "",
+        "map_style": "light",
+        "seo_h_tag": "h2",
+        "enable_fullheight": false,
+        "section_padding_top": 60,
+        "section_padding_bottom": 60,
+        "form_spacing": 20
+      }
+    }
+  },
+  "order": [
+    "image_with_text_j7zLYt",
+    "main",
+    "navigation",
+    "image_with_text_4kzxqt",
+    "rich_text_Prknyt",
+    "image_with_text_EtaRfJ",
+    "text_columns_with_icons_np6yzQ",
+    "contact_form_CK4Gfp"
+  ]
+}
