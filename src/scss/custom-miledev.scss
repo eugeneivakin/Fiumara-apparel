@@ -6,9 +6,8 @@
       > .site-box {
         &:first-child {
           &.mobile-height-full {
-            @include sm-max {
-              min-height: auto;
-            }
+            height: auto;
+            min-height: auto !important;
           }
 
           &.box--bigger {
@@ -38,7 +37,7 @@
 
           .site-box-background {
             height: auto;
-            margin: calc(var(--box-auto-top) * -1) calc(var(--box-big-padding) * -1);
+            margin: calc(var(--box-smaller-padding) * -1);
             position: relative;
             width: auto;
           }
