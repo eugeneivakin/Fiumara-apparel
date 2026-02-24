@@ -1,7 +1,6 @@
-@media screen and (max-width: 749px) {
-  .template-collection-marcus [id*=__image_with_text_j7zLYt] .site-box-container > .site-box:first-child.mobile-height-full {
-    min-height: auto;
-  }
+.template-collection-marcus [id*=__image_with_text_j7zLYt] .site-box-container > .site-box:first-child.mobile-height-full {
+  height: auto;
+  min-height: auto !important;
 }
 .template-collection-marcus [id*=__image_with_text_j7zLYt] .site-box-container > .site-box:first-child.box--bigger {
   min-height: auto;
@@ -27,7 +26,7 @@
 }
 .template-collection-marcus [id*=__image_with_text_j7zLYt] .site-box-container > .site-box:first-child .site-box-background {
   height: auto;
-  margin: calc(var(--box-auto-top) * -1) calc(var(--box-big-padding) * -1);
+  margin: calc(var(--box-smaller-padding) * -1);
   position: relative;
   width: auto;
 }
