@@ -154,10 +154,31 @@
                           <template>
                       {%- endif -%}
 
+                        {%- if block.settings.mobile_image != blank -%}
+                          {%- assign mobile_id = 'mobile' | append: block.id -%}
+                          {%- liquid
+                            render 'lazy-image', image: block.settings.mobile_image, id: mobile_id, sizes: '100vw', class: image_class, preload: preload, image_alignment: true
+                            assign image_class = ""
+                          -%}
+                          <style>
+                            img#responsive-background-{{ mobile_id }} {
+                              display: none;
+                            }
+                            @media screen and (max-width: 768px), screen and (max-width: 920px) and (max-device-aspect-ratio: 25/30) {
+                              img#responsive-background-{{ mobile_id }} {
+                                display: block;
+                              }
+                              img#responsive-background-{{ block.id }} {
+                                display: none;
+                              }
+                            }
+                          </style>
+                        {%- endif -%}
+
                         {%- liquid
 
                           if block.settings.image != blank
-                            render 'lazy-image', image: block.settings.image, mobile_image: block.settings.mobile_image, id: block.id, sizes: '100vw', class: image_class, preload: preload, image_alignment: true
+                            render 'lazy-image', image: block.settings.image, id: block.id, sizes: '100vw', class: image_class, preload: preload, image_alignment: true
                           endif
 
                           if settings.show_preloader

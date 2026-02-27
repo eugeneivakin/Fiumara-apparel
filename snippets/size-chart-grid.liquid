@@ -18,6 +18,7 @@
 {%- assign is_pants = false -%}
 {%- assign is_shirt = false -%}
 {%- assign is_headwear = false -%}
+{%- assign is_footwear = false -%}
 
 {%- if product_title_lower contains 'chef coat' or product_title_lower contains 'chef jacket' or product_type_lower contains 'chef coat' -%}
   {%- assign is_coat = true -%}
@@ -37,6 +38,10 @@
 
 {%- if product_title_lower contains 'hat' or product_title_lower contains 'cap' or product_title_lower contains 'beanie' or product_type_lower contains 'headwear' or product_type_lower contains 'hat' -%}
   {%- assign is_headwear = true -%}
+{%- endif -%}
+
+{%- if product_title_lower contains 'footwear' or product_type_lower contains 'footwear' or product_title_lower contains 'clog' or product_type_lower contains 'clog' or product_title_lower contains 'shoe' or product_type_lower contains 'shoe' or product_title_lower contains 'boot' or product_type_lower contains 'boot' or product_title_lower contains 'sandal' or product_type_lower contains 'sandal' -%}
+  {%- assign is_footwear = true -%}
 {%- endif -%}
 
 {%- assign shared_intro = "<p><strong>MEASUREMENTS &amp; SIZES</strong>: To help you find the right fit, use the sizing guidelines below. The measurements refer to body size, not garment size—each item includes extra room for comfort and movement. For sizing questions, contact customer service at <a href='tel:1-855-348-6272' title='tel:1-855-348-6272'>1-855-348-6272</a>.</p><p><strong>MEASUREMENT GUIDELINES</strong> <em>(Stand straight and relaxed for best results)</em>:<br><strong>Chest</strong>: Measure around the fullest part of chest (arms down).<br><strong>Waist</strong>: Measure at your natural waist above the hips.<br><strong>Hips</strong>: Measure around the widest part of the hips.<br><strong>Neck</strong>: Measure around the neck at the Adam's apple.<br><strong>Inseam</strong>: Measure from the crotch to the bottom of the leg, or use a well-fitting pair of pants and measure the inside seam.</p>" -%}
@@ -60,8 +65,10 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
     {%- assign vendor_chart_type = 'footwear-multi' -%}
     {%- assign sika_men_us = '6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½|14-14½|15-15½' | split: '|' -%}
     {%- assign sika_men_eu = '39|40|41|42|43|44|45|46|47|48' | split: '|' -%}
+    {%- assign sika_men_eu_labels = 'S|M|M|L|L|XL|XL|2XL|2XL|3XL' | split: '|' -%}
     {%- assign sika_women_us = '5-5½|6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½' | split: '|' -%}
     {%- assign sika_women_eu = '35|36|37|38|39|40|41|42|43' | split: '|' -%}
+    {%- assign sika_women_eu_labels = 'XXS|XS|XS|S|S|M|M|L|L' | split: '|' -%}
 
   {%- when 'pro-compression', 'procompression', 'pro compression' -%}
     {%- liquid
@@ -138,10 +145,13 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
       assign vendor_chart_type = 'birkenstock-footwear'
       assign b_men_us = '5-5½|6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½|14-14½|15-15½|16-16½|17-17½' | split: '|'
       assign b_men_birk = '38|39|40|41|42|43|44|45|46|47|48|49|50' | split: '|'
+      assign b_men_birk_eu_labels = 'S|S|M|M|L|L|XL|XL|2XL|2XL|3XL|3XL|4XL' | split: '|'
       assign b_women_us = '2-2½|3-3½|4-4½|5-5½|6-6½|7-7½|8-8½|9-9½|10-10½|11-11½|12-12½|13-13½' | split: '|'
       assign b_women_birk = '33|34|35|36|37|38|39|40|41|42|43|44' | split: '|'
+      assign b_women_birk_eu_labels = 'XXS|XXS|XXS|XS|XS|S|S|M|M|L|L|XL' | split: '|'
       assign b_kids_us = '7-7½|8|8½|9-9½|10-10½|11-11½|12-12½|13-13½|1-1½|2-2½|3-3½|4-4½|5-5½|6-6½' | split: '|'
       assign b_kids_birk = '24|25|26|27|28|29|30|31|32|33|34|35|36|37' | split: '|'
+      assign b_kids_birk_eu_labels = 'XXS|XXS|XXS|XXS|XXS|XXS|XXS|XXS|XXS|XXS|XXS|XXS|XS|XS' | split: '|'
     -%}
 
   {%- when 'landau' -%}
@@ -165,13 +175,16 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
       assign vendor_intro = shared_intro | append: '<p><em>Note: all sizes below are in centimeters (cm).</em></p>'
       assign vendor_chart_type = 'kentaur-metric'
       assign kentaur_w_labels = '34|36|38|40|42|44|46|48|50|52|54|56' | split: '|'
+      assign kentaur_w_eu_labels = 'XS|XS|S|S|M|M|L|L|XL|XL|2XL|3XL' | split: '|'
       assign kentaur_w_chest = '80|84|88|92|96|100|106|112|118|124|130|136' | split: '|'
       assign kentaur_w_waist = '62|66|70|74|78|82|88|94|100|106|112|118' | split: '|'
       assign kentaur_w_hip = '86|90|94|98|102|106|112|118|124|130|136|142' | split: '|'
       assign kentaur_m_labels = '44|46|48|50|52|54|56|58|60|62|64|66' | split: '|'
+      assign kentaur_m_eu_labels = 'XS|XS|S|S|M|M|L|L|XL|XL|2XL|3XL' | split: '|'
       assign kentaur_m_chest = '88|92|96|100|104|108|112|116|120|124|128|132' | split: '|'
       assign kentaur_m_waist = '76|80|84|88|92|96|100|104|108|112|116|120' | split: '|'
       assign kentaur_mt_labels = '40|42|44|46|48|50|52|54|56|58|60|62|64|66' | split: '|'
+      assign kentaur_mt_eu_labels = 'XS|XS|S|S|M|M|L|L|XL|XL|2XL|2XL|3XL|4XL' | split: '|'
       assign kentaur_mt_waist = '68|72|76|80|84|88|92|96|100|104|108|112|116|120' | split: '|'
       assign kentaur_mt_hip = '83|87|91|95|99|103|107|111|115|119|123|127|131|135' | split: '|'
     -%}
@@ -194,8 +207,10 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
       assign vendor_chart_type = 'giasco-footwear'
       assign giasco_w_us = '4|5|6|7|8|9|10|11|12' | split: '|'
       assign giasco_w_eu = '36|37|38|39|40|41|42|43|44' | split: '|'
+      assign giasco_w_eu_labels = 'XS|XS|S|S|M|M|L|L|XL' | split: '|'
       assign giasco_m_us = '4|5|6|7|8|9|10|11|12' | split: '|'
       assign giasco_m_eu = '38|39|40|41|42|43|44|45|46' | split: '|'
+      assign giasco_m_eu_labels = 'S|S|M|M|L|L|XL|XL|2XL' | split: '|'
     -%}
 
   {%- when 'chef-works', 'chefworks', 'chef works', "chef's works" -%}
@@ -242,8 +257,10 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
       assign vendor_chart_type = 'sanita-footwear'
       assign sanita_w_us = '5|5.5/6|6.5|7/7.5|8/8.5|9/9.5|10|10.5/11|12' | split: '|'
       assign sanita_w_eu = '35|36|37|38|39|40|41|42|43' | split: '|'
+      assign sanita_w_eu_labels = 'XXS|XS|XS|S|S|M|M|L|L' | split: '|'
       assign sanita_m_us = '7|7.5/8|8.5/9|9.5|10/10.5|11|11.5/12|13|14' | split: '|'
       assign sanita_m_eu = '40|41|42|43|44|45|46|47|48' | split: '|'
+      assign sanita_m_eu_labels = 'M|M|L|L|XL|XL|2XL|2XL|3XL' | split: '|'
     -%}
 
   {%- when 'le-nouveau', 'le nouveau', 'lenouveauchef', 'le nouveau chef' -%}
@@ -321,10 +338,12 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
           {%- if gender == 'men' -%}
             {%- assign fw_us = sika_men_us -%}
             {%- assign fw_eu = sika_men_eu -%}
+            {%- assign fw_eu_labels = sika_men_eu_labels -%}
             {%- assign fw_label = 'Footwear Men' -%}
           {%- else -%}
             {%- assign fw_us = sika_women_us -%}
             {%- assign fw_eu = sika_women_eu -%}
+            {%- assign fw_eu_labels = sika_women_eu_labels -%}
             {%- assign fw_label = 'Footwear Women' -%}
           {%- endif -%}
           <div class="size-chart-grid__measurement">
@@ -334,12 +353,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ fw_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading" role="columnheader">US/Canada</span>
                   {%- for v in fw_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in fw_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < fw_eu_labels.size -%}
+                      {%- assign next_val = fw_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = fw_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading" role="rowheader">European</span>
                   {%- for v in fw_eu -%}
@@ -571,7 +618,7 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ gg_men.size }}">
                 {%- if gender == 'men' -%}
-                  <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <div class="size-chart-grid__row" role="row">
                     <span class="size-chart-grid__row-heading">Men - U.S. Size</span>
                     {%- for v in gg_men -%}
                       <span role="columnheader">{{ v }}</span>
@@ -771,12 +818,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ b_men_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">U.S. Size</span>
                   {%- for v in b_men_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in b_men_birk_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < b_men_birk_eu_labels.size -%}
+                      {%- assign next_val = b_men_birk_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = b_men_birk_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">Birkenstock</span>
                   {%- for v in b_men_birk -%}
@@ -794,12 +869,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ b_women_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">U.S. Size</span>
                   {%- for v in b_women_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in b_women_birk_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < b_women_birk_eu_labels.size -%}
+                      {%- assign next_val = b_women_birk_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = b_women_birk_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">Birkenstock</span>
                   {%- for v in b_women_birk -%}
@@ -817,12 +920,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ b_kids_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">U.S. Size</span>
                   {%- for v in b_kids_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in b_kids_birk_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < b_kids_birk_eu_labels.size -%}
+                      {%- assign next_val = b_kids_birk_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = b_kids_birk_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">Birkenstock</span>
                   {%- for v in b_kids_birk -%}
@@ -941,6 +1072,32 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ kentaur_w_labels.size }}">
                 <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
                   <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in kentaur_w_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < kentaur_w_eu_labels.size -%}
+                      {%- assign next_val = kentaur_w_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = kentaur_w_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">&nbsp;</span>
                   {%- for v in kentaur_w_labels -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
@@ -976,6 +1133,32 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ kentaur_m_labels.size }}">
                 <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
                   <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in kentaur_m_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < kentaur_m_eu_labels.size -%}
+                      {%- assign next_val = kentaur_m_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = kentaur_m_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">&nbsp;</span>
                   {%- for v in kentaur_m_labels -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
@@ -1005,6 +1188,32 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ kentaur_mt_labels.size }}">
                 <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
                   <span class="size-chart-grid__row-heading">Size</span>
+                  {%- for v in kentaur_mt_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < kentaur_mt_eu_labels.size -%}
+                      {%- assign next_val = kentaur_mt_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = kentaur_mt_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading">&nbsp;</span>
                   {%- for v in kentaur_mt_labels -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
@@ -1098,12 +1307,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ giasco_w_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">U.S.</span>
                   {%- for v in giasco_w_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in giasco_w_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < giasco_w_eu_labels.size -%}
+                      {%- assign next_val = giasco_w_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = giasco_w_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">EU</span>
                   {%- for v in giasco_w_eu -%}
@@ -1121,12 +1358,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ giasco_m_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">U.S.</span>
                   {%- for v in giasco_m_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in giasco_m_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < giasco_m_eu_labels.size -%}
+                      {%- assign next_val = giasco_m_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = giasco_m_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">EU</span>
                   {%- for v in giasco_m_eu -%}
@@ -1147,12 +1412,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ sanita_w_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">U.S.</span>
                   {%- for v in sanita_w_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in sanita_w_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < sanita_w_eu_labels.size -%}
+                      {%- assign next_val = sanita_w_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = sanita_w_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">Sanita</span>
                   {%- for v in sanita_w_eu -%}
@@ -1170,12 +1463,40 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
             </label>
             <div class="size-chart-grid__measurement-body" aria-hidden="false">
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ sanita_m_us.size }}">
-                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">U.S.</span>
                   {%- for v in sanita_m_us -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
+                {%- unless is_footwear -%}
+                  <div class="size-chart-grid__row" role="row">
+                    <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                    {%- for v in sanita_m_eu_labels -%}
+                    {%- assign idx = forloop.index | minus: 1 -%}
+                    {%- assign idx_mod = idx | modulo: 2 -%}
+                    {%- assign next_idx = idx | plus: 1 -%}
+                    {%- if next_idx < sanita_m_eu_labels.size -%}
+                      {%- assign next_val = sanita_m_eu_labels[next_idx] -%}
+                    {%- else -%}
+                      {%- assign next_val = '' -%}
+                    {%- endif -%}
+                    {%- if v == next_val and idx_mod == 0 -%}
+                      <span role="columnheader" class="size-chart-grid__row-spanned">{{ v }}</span>
+                    {%- elsif v != next_val -%}
+                      {%- assign prev_idx = idx | minus: 1 -%}
+                      {%- if prev_idx >= 0 -%}
+                        {%- assign prev_val = sanita_m_eu_labels[prev_idx] -%}
+                      {%- else -%}
+                        {%- assign prev_val = '' -%}
+                      {%- endif -%}
+                      {%- unless idx_mod == 1 and prev_val == v -%}
+                        <span role="columnheader">{{ v }}</span>
+                      {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
                 <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">Sanita</span>
                   {%- for v in sanita_m_eu -%}
@@ -1202,15 +1523,15 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
-                <div class="size-chart-grid__row" role="row">
-                  <span class="size-chart-grid__row-heading">EU</span>
-                  {%- for v in ln_w_eu -%}
-                    <span role="cell">{{ v }}</span>
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
+                  {%- for v in ln_w_general -%}
+                    <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
                 <div class="size-chart-grid__row" role="row">
-                  <span class="size-chart-grid__row-heading">General</span>
-                  {%- for v in ln_w_general -%}
+                  <span class="size-chart-grid__row-heading">EU</span>
+                  {%- for v in ln_w_eu -%}
                     <span role="cell">{{ v }}</span>
                   {%- endfor -%}
                 </div>
@@ -1233,25 +1554,25 @@ call the customer service department at <a href='tel:1-855-348-6272' title='tel:
               <div class="size-chart-grid__table size-chart-grid__table--mobile" role="table" style="--size-chart-columns: {{ ln_m_ukus.size }}">
                 <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
                   <span class="size-chart-grid__row-heading">UK/US</span>
+                  {%- for v in ln_m_general -%}
+                    <span role="columnheader">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row size-chart-grid__row--head" role="row">
+                  <span class="size-chart-grid__row-heading" role="columnheader">&nbsp;</span>
                   {%- for v in ln_m_ukus -%}
                     <span role="columnheader">{{ v }}</span>
                   {%- endfor -%}
                 </div>
                 <div class="size-chart-grid__row" role="row">
-                  <span class="size-chart-grid__row-heading">EU</span>
-                  {%- for v in ln_m_eu -%}
-                    <span role="cell">{{ v }}</span>
-                  {%- endfor -%}
-                </div>
-                <div class="size-chart-grid__row" role="row">
-                  <span class="size-chart-grid__row-heading">General</span>
-                  {%- for v in ln_m_general -%}
-                    <span role="cell">{{ v }}</span>
-                  {%- endfor -%}
-                </div>
-                <div class="size-chart-grid__row" role="row">
                   <span class="size-chart-grid__row-heading">Our Size</span>
                   {%- for v in ln_m_our -%}
+                    <span role="cell">{{ v }}</span>
+                  {%- endfor -%}
+                </div>
+                <div class="size-chart-grid__row" role="row">
+                  <span class="size-chart-grid__row-heading">EU</span>
+                  {%- for v in ln_m_eu -%}
                     <span role="cell">{{ v }}</span>
                   {%- endfor -%}
                 </div>

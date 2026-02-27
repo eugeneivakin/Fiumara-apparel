@@ -59,7 +59,7 @@
       {%- if section.settings.image == blank -%}
         <span class="onboarding-svg">{{ 'image' | placeholder_svg_tag }}</span>
       {%- else -%}
-        {%- render 'lazy-image', image: section.settings.image, id: section.id, sizes: '100vw', image_alignment: true, preload: preload -%}
+        {%- render 'lazy-image', image: section.settings.image id: section.id, sizes: '100vw', image_alignment: true, preload: preload -%}
       {%- endif -%}
       </span> 
 

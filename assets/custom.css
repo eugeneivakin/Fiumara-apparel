@@ -291,7 +291,7 @@ summary::before {
   margin: 0 0 30px;
 }
 
-.short-text:not(.main-collection-product-grid .short-text) {
+.short-text {
   all: unset;
   display: block;
   font-family: var(--font-stack-body);
@@ -302,16 +302,9 @@ summary::before {
   overflow-wrap: break-word;
 }
 
-
 /* Hide collection description on mobile */
 @media screen and (max-width: 480px) {
-  .product-description-short .short-text {
-    text-align: center;
-  }
-  .product-description-short .short-text > div {
-    text-align: center !important;
-  }
-  .short-text:not(.product-description-short .short-text) {
+  .short-text {
     display: none;
   }
 }
