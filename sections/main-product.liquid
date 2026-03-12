@@ -109,7 +109,7 @@
                     </span>
                     {%- if section.settings.gallery_pagination == 'thumbnails' -%}
                       <div class="thumbnail__image" aria-hidden="true">
-                        {%- render 'lazy-image-small', image: media.preview_image, sizes: '64px' -%}
+                        {%- render 'lazy-image-small', image: media.preview_image, sizes: '(min-width: 767px) 150px, 100px' -%}
                         {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
                           <span class="thumbnail__badge">
                             {%- render 'theme-symbols', icon: 'badge-video-thumbnail' -%}
@@ -170,12 +170,12 @@
                 else
                   assign size_chart_is_pants = false
                 endif
-                
+
                 assign size_chart_is_one_size = false
                 if vendor_key == 'fiumara-apparel' or vendor_key == 'fiumara' or vendor_key == 'fiamara'
                   assign size_chart_is_one_size = true
                 endif
-                
+
                 assign page_men = pages[block.settings.page_men]
                 assign page_women = pages[block.settings.page_women]
                 assign page_men_content = ''
@@ -186,7 +186,7 @@
                 if page_women != blank and page_women.content != blank
                   assign page_women_content = page_women.content
                 endif
-                
+
                 assign has_size_option = false
                 for option in product.options_with_values
                   assign option_name_lower = option.name | downcase
@@ -207,7 +207,14 @@
                     endif
                   -%}
 
-                  <label for="size-chart-open-{{ block.id }}" class="size-chart-trigger {{ icon_class }}" data-size-chart-toggle role="button" aria-controls="size-chart-panel-{{ block.id }}" aria-expanded="false">
+                  <label
+                    for="size-chart-open-{{ block.id }}"
+                    class="size-chart-trigger {{ icon_class }}"
+                    data-size-chart-toggle
+                    role="button"
+                    aria-controls="size-chart-panel-{{ block.id }}"
+                    aria-expanded="false"
+                  >
                     <span class="size-chart-trigger__wrapper">
                       {%- if block.settings.has_icon -%}
                         {%- render 'theme-symbols', icon: 'size-chart' -%}
@@ -217,44 +224,147 @@
                     <span class="size-chart-trigger__icon" aria-hidden="true"></span>
                   </label>
 
-                  <div class="size-chart-panel" id="size-chart-panel-{{ block.id }}" data-size-chart-panel aria-hidden="true" {% if size_chart_is_one_size %}data-one-size="true"{% endif %}>
+                  <div
+                    class="size-chart-panel"
+                    id="size-chart-panel-{{ block.id }}"
+                    data-size-chart-panel
+                    aria-hidden="true"
+                    {% if size_chart_is_one_size %}
+                      data-one-size="true"
+                    {% endif %}
+                  >
                     {%- if size_chart_is_one_size -%}
-                      <input type="radio" name="size-chart-tab-{{ block.id }}" id="size-chart-tab-onesize-{{ block.id }}" class="size-chart-tab-input" checked>
-                      
-                      <div class="size-chart-panel__tabs size-chart-panel__tabs--one-size" role="tablist" aria-label="Product sizing chart">
-                        <label class="size-chart-panel__tab" for="size-chart-tab-onesize-{{ block.id }}" aria-controls="size-chart-pane-onesize-{{ block.id }}" role="tab">One Size</label>
+                      <input
+                        type="radio"
+                        name="size-chart-tab-{{ block.id }}"
+                        id="size-chart-tab-onesize-{{ block.id }}"
+                        class="size-chart-tab-input"
+                        checked
+                      >
+
+                      <div
+                        class="size-chart-panel__tabs size-chart-panel__tabs--one-size"
+                        role="tablist"
+                        aria-label="Product sizing chart"
+                      >
+                        <label
+                          class="size-chart-panel__tab"
+                          for="size-chart-tab-onesize-{{ block.id }}"
+                          aria-controls="size-chart-pane-onesize-{{ block.id }}"
+                          role="tab"
+                          >One Size</label
+                        >
                       </div>
 
                       <div class="size-chart-panel__content">
-                        <div class="size-chart-panel__pane" id="size-chart-pane-onesize-{{ block.id }}" data-size-chart-pane="onesize" role="tabpanel" aria-hidden="false">
+                        <div
+                          class="size-chart-panel__pane"
+                          id="size-chart-pane-onesize-{{ block.id }}"
+                          data-size-chart-pane="onesize"
+                          role="tabpanel"
+                          aria-hidden="false"
+                        >
                           {%- render 'size-chart-grid', chart_id: block.id -%}
                         </div>
                       </div>
                     {%- else -%}
-                      <input type="radio" name="size-chart-tab-{{ block.id }}" id="size-chart-tab-men-{{ block.id }}" class="size-chart-tab-input" checked>
-                      <input type="radio" name="size-chart-tab-{{ block.id }}" id="size-chart-tab-women-{{ block.id }}" class="size-chart-tab-input">
+                      <input
+                        type="radio"
+                        name="size-chart-tab-{{ block.id }}"
+                        id="size-chart-tab-men-{{ block.id }}"
+                        class="size-chart-tab-input"
+                        checked
+                      >
+                      <input
+                        type="radio"
+                        name="size-chart-tab-{{ block.id }}"
+                        id="size-chart-tab-women-{{ block.id }}"
+                        class="size-chart-tab-input"
+                      >
                       {%- if size_chart_has_kids -%}
-                        <input type="radio" name="size-chart-tab-{{ block.id }}" id="size-chart-tab-kids-{{ block.id }}" class="size-chart-tab-input">
+                        <input
+                          type="radio"
+                          name="size-chart-tab-{{ block.id }}"
+                          id="size-chart-tab-kids-{{ block.id }}"
+                          class="size-chart-tab-input"
+                        >
                       {%- endif -%}
 
                       <div class="size-chart-panel__tabs" role="tablist" aria-label="Product sizing chart">
-                        <label class="size-chart-panel__tab" for="size-chart-tab-men-{{ block.id }}" aria-controls="size-chart-pane-men-{{ block.id }}" role="tab">Man</label>
-                        <label class="size-chart-panel__tab" for="size-chart-tab-women-{{ block.id }}" aria-controls="size-chart-pane-women-{{ block.id }}" role="tab">Woman</label>
+                        <label
+                          class="size-chart-panel__tab"
+                          for="size-chart-tab-men-{{ block.id }}"
+                          aria-controls="size-chart-pane-men-{{ block.id }}"
+                          role="tab"
+                          >Man</label
+                        >
+                        <label
+                          class="size-chart-panel__tab"
+                          for="size-chart-tab-women-{{ block.id }}"
+                          aria-controls="size-chart-pane-women-{{ block.id }}"
+                          role="tab"
+                          >Woman</label
+                        >
                         {%- if size_chart_has_kids -%}
-                          <label class="size-chart-panel__tab" for="size-chart-tab-kids-{{ block.id }}" aria-controls="size-chart-pane-kids-{{ block.id }}" role="tab">Kids</label>
+                          <label
+                            class="size-chart-panel__tab"
+                            for="size-chart-tab-kids-{{ block.id }}"
+                            aria-controls="size-chart-pane-kids-{{ block.id }}"
+                            role="tab"
+                            >Kids</label
+                          >
                         {%- endif -%}
                       </div>
 
                       <div class="size-chart-panel__content">
-                        <div class="size-chart-panel__pane" id="size-chart-pane-men-{{ block.id }}" data-size-chart-pane="men" role="tabpanel" aria-hidden="false">
-                          {%- render 'size-chart-grid', gender: 'men', page_content: page_men_content, chart_id: block.id, is_shoes: size_chart_has_kids, is_cook_shirt: size_chart_is_cook, is_pants: size_chart_is_pants -%}
+                        <div
+                          class="size-chart-panel__pane"
+                          id="size-chart-pane-men-{{ block.id }}"
+                          data-size-chart-pane="men"
+                          role="tabpanel"
+                          aria-hidden="false"
+                        >
+                          {%- render 'size-chart-grid',
+                            gender: 'men',
+                            page_content: page_men_content,
+                            chart_id: block.id,
+                            is_shoes: size_chart_has_kids,
+                            is_cook_shirt: size_chart_is_cook,
+                            is_pants: size_chart_is_pants
+                          -%}
                         </div>
-                        <div class="size-chart-panel__pane" id="size-chart-pane-women-{{ block.id }}" data-size-chart-pane="women" role="tabpanel" aria-hidden="true">
-                          {%- render 'size-chart-grid', gender: 'women', page_content: page_women_content, chart_id: block.id, is_shoes: size_chart_has_kids, is_cook_shirt: size_chart_is_cook, is_pants: size_chart_is_pants -%}
+                        <div
+                          class="size-chart-panel__pane"
+                          id="size-chart-pane-women-{{ block.id }}"
+                          data-size-chart-pane="women"
+                          role="tabpanel"
+                          aria-hidden="true"
+                        >
+                          {%- render 'size-chart-grid',
+                            gender: 'women',
+                            page_content: page_women_content,
+                            chart_id: block.id,
+                            is_shoes: size_chart_has_kids,
+                            is_cook_shirt: size_chart_is_cook,
+                            is_pants: size_chart_is_pants
+                          -%}
                         </div>
                         {%- if size_chart_has_kids -%}
-                          <div class="size-chart-panel__pane" id="size-chart-pane-kids-{{ block.id }}" data-size-chart-pane="kids" role="tabpanel" aria-hidden="true">
-                            {%- render 'size-chart-grid', gender: 'kids', page_content: '', chart_id: block.id, is_shoes: true, is_cook_shirt: size_chart_is_cook, is_pants: size_chart_is_pants -%}
+                          <div
+                            class="size-chart-panel__pane"
+                            id="size-chart-pane-kids-{{ block.id }}"
+                            data-size-chart-pane="kids"
+                            role="tabpanel"
+                            aria-hidden="true"
+                          >
+                            {%- render 'size-chart-grid',
+                              gender: 'kids',
+                              page_content: '',
+                              chart_id: block.id,
+                              is_shoes: true,
+                              is_cook_shirt: size_chart_is_cook,
+                              is_pants: size_chart_is_pants
+                            -%}
                           </div>
                         {%- endif -%}
                       </div>
@@ -336,7 +446,12 @@
                 {% endif %}
                 {{ block.shopify_attributes }}
               >
-                {%- render 'product-variant-picker', product: product, style: block.settings.variants_style, show_color_swatches: block.settings.show_color_swatches, handle_unavailable_variants: block.settings.unavailable_variants -%}
+                {%- render 'product-variant-picker',
+                  product: product,
+                  style: block.settings.variants_style,
+                  show_color_swatches: block.settings.show_color_swatches,
+                  handle_unavailable_variants: block.settings.unavailable_variants
+                -%}
 
                 <script type="application/json">
                   {{ product.variants | json }}
@@ -358,12 +473,26 @@
                   endif
                 -%}
 
-                {%- form 'product', product, id: product_form_id, class: form_class, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                {%- form 'product',
+                  product,
+                  id: product_form_id,
+                  class: form_class,
+                  novalidate: 'novalidate',
+                  data-type: 'add-to-cart-form'
+                -%}
                   <template>
                     <input type="hidden" name="id" value="{{ current_variant.id }}">
                   </template>
                   <script>
-                    document.getElementById('add-to-cart-{{ section.id }}').querySelector('form').append(document.getElementById('add-to-cart-{{ section.id }}').querySelector('template').content.cloneNode(true));
+                    document
+                      .getElementById('add-to-cart-{{ section.id }}')
+                      .querySelector('form')
+                      .append(
+                        document
+                          .getElementById('add-to-cart-{{ section.id }}')
+                          .querySelector('template')
+                          .content.cloneNode(true)
+                      );
                   </script>
 
                   {%- liquid
@@ -386,22 +515,29 @@
 
                     <div class="product-options__wrapper" data-w3-wrapper style="width:100%;display:none;">
                       <div class="product-options__heading">
-                        {{ block.settings.image | image_url: width: 750 | image_tag: loading: 'lazy', decoding: 'async' }}
+                        {{
+                          block.settings.image
+                          | image_url: width: 750
+                          | image_tag: loading: 'lazy', decoding: 'async'
+                        }}
                         <span>Please allow 2-3 weeks before shipping</span>
                       </div>
                       {% render 'w3-product-options', step: 'widget' %}
                     </div>
                     <script>
-                      (function() {
+                      (function () {
                         var scriptEl = document.currentScript;
-                        var wrapper = scriptEl && scriptEl.previousElementSibling && scriptEl.previousElementSibling.hasAttribute('data-w3-wrapper')
-                          ? scriptEl.previousElementSibling
-                          : document.querySelector('[data-w3-wrapper]');
+                        var wrapper =
+                          scriptEl &&
+                          scriptEl.previousElementSibling &&
+                          scriptEl.previousElementSibling.hasAttribute('data-w3-wrapper')
+                            ? scriptEl.previousElementSibling
+                            : document.querySelector('[data-w3-wrapper]');
                         if (!wrapper) return;
                         var widget = wrapper.querySelector('.w3-product-options');
                         if (!widget) return;
 
-                        var hasContent = function() {
+                        var hasContent = function () {
                           return widget.children.length > 0 || widget.textContent.trim().length > 0;
                         };
 
@@ -410,7 +546,7 @@
                           return;
                         }
 
-                        var observer = new MutationObserver(function() {
+                        var observer = new MutationObserver(function () {
                           if (hasContent()) {
                             wrapper.style.display = '';
                             observer.disconnect();
@@ -419,7 +555,7 @@
 
                         observer.observe(widget, { childList: true, subtree: true });
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                           if (!hasContent()) {
                             wrapper.style.display = 'none';
                           }
@@ -537,7 +673,9 @@
             {%- when 'pickup_avaiability' -%}
               {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
 
-              {%- assign pick_up_availabilities = current_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+              {%- assign pick_up_availabilities = current_variant.store_availabilities
+                | where: 'pick_up_enabled', true
+              -%}
 
               <pickup-availability
                 class="product__pickup-availabilities no-js-hidden"
@@ -716,11 +854,22 @@
                     aria-expanded="{% if block.settings.open_by_default %}true{% else %}false{% endif %}"
                     aria-controls="toggle-{{ block.id }}"
                     data-js-title
-                    {% if block.settings.open_by_default %}data-open-by-default{% endif %}
+                    {% if block.settings.open_by_default %}
+                      data-open-by-default
+                    {% endif %}
                   >
                     {%- if block.settings.icon != blank -%}
                       <span class="toggle__icon">
-                        {{ block.settings.icon | image_url: width: 64 | image_tag: loading: 'lazy', decoding: 'async', widths: '32,48,64', sizes: '32px', alt: block.settings.heading }}
+                        {{
+                          block.settings.icon
+                          | image_url: width: 64
+                          | image_tag:
+                            loading: 'lazy',
+                            decoding: 'async',
+                            widths: '32,48,64',
+                            sizes: '32px',
+                            alt: block.settings.heading
+                        }}
                       </span>
                     {%- endif -%}
                     <span class="title">{{- block.settings.heading | escape -}}</span>
@@ -808,7 +957,13 @@
 
     const fixedBtn = fixedBtnContainer.querySelector('button');
     let observer = null;
-    const blockersSelectors = ['product-form-w3', '.site-footer', '.product-gallery', '.product-header', 'product-variants'];
+    const blockersSelectors = [
+      'product-form-w3',
+      '.site-footer',
+      '.product-gallery',
+      '.product-header',
+      'product-variants',
+    ];
 
     const checkVisibility = () => {
       if (window.innerWidth > 1024) {
@@ -865,7 +1020,10 @@
       fixedBtn.addEventListener('click', function (e) {
         e.preventDefault();
 
-        if (addToCartBtn.getBoundingClientRect().top < 0 || addToCartBtn.getBoundingClientRect().bottom > window.innerHeight) {
+        if (
+          addToCartBtn.getBoundingClientRect().top < 0 ||
+          addToCartBtn.getBoundingClientRect().bottom > window.innerHeight
+        ) {
           addToCartBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
