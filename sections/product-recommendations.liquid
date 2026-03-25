@@ -25,7 +25,7 @@
         <div data-count="{{ recommendations.products.size | modulo: 4 }}" class="product-grid-border-fix fix-borders-split" data-grid-columns="2">
           
           {%- for product in recommendations.products -%}
-            <div class="site-box box--small lap--box--small-lg box--typo-small box--center-align box--no-padding box--column-flow box__collection active" data-js-product-item>
+            <div class="site-box box--small lap--box--small-lg box--typo-small box--center-align box--no-padding box--column-flow box__collection active" data-js-product-item data-product-type="{{ product.type | escape }}">
               <div class="site-box-content product-holder">
                 {%- render 'product-item', product: product, index: forloop.index0 -%}
               </div>
