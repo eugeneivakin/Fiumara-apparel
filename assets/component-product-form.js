@@ -521,9 +521,6 @@ if (typeof ProductForm !== 'function') {
 						}
 						return fetch('?section_id=helper-cart');
 					} else {
-						if (window.sessionStorage) {
-							sessionStorage.setItem('lastAddedProductType', response.product_type || '');
-						}
 						if (this.cartType == 'page') {
 							document.location.href = KROWN.settings.routes.cart_url;
 							return false;
@@ -644,6 +641,14 @@ if (typeof ProductRecommendations !== 'function') {
 
 						if (innerHTML && innerHTML.querySelectorAll('[data-js-product-item]').length > 0) {
 							this.innerHTML = innerHTML.innerHTML;
+							const lastType = (window.sessionStorage && sessionStorage.getItem('lastAddedProductType')) || '';
+							if (lastType) {
+								this.querySelectorAll('[data-product-type]').forEach(item => {
+									if (item.dataset.productType.toLowerCase() === lastType.toLowerCase()) {
+										item.remove();
+									}
+								});
+							}
 							this.querySelectorAll('form').forEach(elm => {
 								if (elm.querySelector('template')) {
 									elm.append(elm.querySelector('template').content.cloneNode(true));
