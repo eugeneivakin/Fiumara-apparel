@@ -11,25 +11,52 @@
   }
 {%- endstyle -%}
 
-<product-recommendations id="main-product-recommendations" class="product-recommendations site-box-container section--{{ section.id }}" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4" style="min-height:1px;overflow:visible">
+<product-recommendations
+  id="main-product-recommendations"
+  class="product-recommendations site-box-container section--{{ section.id }}"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4"
+  style="min-height:1px;overflow:visible"
+>
   {%- if recommendations.performed and recommendations.products_count > 0 -%}
     <div id="section-related-products" style="width:100%">
       <div class="fix-collection-grid-box-design clearfix box--can-stick">
-        <div class="site-box lap--box--small-fl-auto palm--box--small-fl box--typo-big box--center-align box--column-flow box__heading" data-order="0">
+        <div
+          class="site-box lap--box--small-fl-auto palm--box--small-fl box--typo-big box--center-align box--column-flow box__heading"
+          data-order="0"
+        >
           <div class="site-box-content">
             <span class="title h2">{{ section.settings.heading | escape }}</span>
             {%- if settings.headings_hr -%}<hr>{%- endif -%}
           </div>
         </div>
 
-        <div data-count="{{ recommendations.products.size | modulo: 4 }}" class="product-grid-border-fix fix-borders-split" data-grid-columns="2">
-          {%- for product in recommendations.products -%}
-            <div class="site-box box--small lap--box--small-lg box--typo-small box--center-align box--no-padding box--column-flow box__collection active" data-js-product-item>
-              <div class="site-box-content product-holder">
-                {%- render 'product-item', product: product, index: forloop.index0 -%}
-              </div>
-            </div>
-          {%- endfor -%}
+        <div
+          data-count="{{ recommendations.products.size | modulo: 4 }}"
+          class="product-grid-border-fix fix-borders-split"
+          data-grid-columns="2"
+        >
+          {% if cart.item_count > 0 %}
+            {% assign last_product = cart.items.last.product %}
+            {% assign last_type = last_product.type %}
+
+            {% assign shown = 0 %}
+
+            {% for product in recommendations.products %}
+              {% if product.type != last_type %}
+                <div class="site-box box--small lap--box--small-lg box--typo-small box--center-align box--no-padding box--column-flow box__collection active">
+                  <div class="site-box-content product-holder">
+                    {% render 'product-item', product: product %}
+                  </div>
+                </div>
+
+                {% assign shown = shown | plus: 1 %}
+              {% endif %}
+
+              {% if shown == 4 %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
         </div>
 
         {% comment %}
