@@ -15,8 +15,14 @@ class CartRecommendations extends HTMLElement {
             .parseFromString(text, 'text/html')
             .querySelector('[data-js-cart-recommendations-performed]');
           if ( innerHTML && innerHTML.querySelectorAll('[data-js-product-item]').length > 0 ) {
-          	this.innerHTML = innerHTML.innerHTML;
-          }
+          	this.innerHTML = innerHTML.innerHTML;          	const lastType = (window.sessionStorage && sessionStorage.getItem('lastAddedProductType')) || '';
+          	if (lastType) {
+          		this.querySelectorAll('[data-product-type]').forEach(function(item) {
+          			if (item.dataset.productType.toLowerCase() === lastType.toLowerCase()) {
+          				item.remove();
+          			}
+          		});
+          	}          }
 				})
 		}
 	}
