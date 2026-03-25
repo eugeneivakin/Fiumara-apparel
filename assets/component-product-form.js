@@ -521,8 +521,12 @@ if (typeof ProductForm !== 'function') {
 						}
 						return fetch('?section_id=helper-cart');
 					} else {
+						const addedType = response.product_type || '';
 						if (window.sessionStorage) {
-							sessionStorage.setItem('lastAddedProductType', response.product_type || '');
+							sessionStorage.setItem('lastAddedProductType', addedType);
+						}
+						if (addedType) {
+							window._filterRecommendationsByType && window._filterRecommendationsByType(addedType);
 						}
 						if (this.cartType == 'page') {
 							document.location.href = KROWN.settings.routes.cart_url;
@@ -616,7 +620,7 @@ if (typeof ProductForm !== 'function') {
 
 }
 
-* ---
+/* ---
 	Filter recommendations helper
 --- */
 
@@ -692,6 +696,8 @@ if (typeof ProductRecommendations !== 'function') {
 									}
 								});
 							}
+							// clear stored type so subsequent page visits don't carry over the filter
+							if (window.sessionStorage) sessionStorage.removeItem('lastAddedProductType');
 							this.querySelectorAll('form').forEach(elm => {
 								if (elm.querySelector('template')) {
 									elm.append(elm.querySelector('template').content.cloneNode(true));
@@ -718,6 +724,7 @@ if (typeof ProductRecommendations !== 'function') {
 	}
 
 }
+
 /* ---
 	Gift card recipent
 --- */
