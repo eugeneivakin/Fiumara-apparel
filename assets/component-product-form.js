@@ -521,6 +521,9 @@ if (typeof ProductForm !== 'function') {
 						}
 						return fetch('?section_id=helper-cart');
 					} else {
+						if (window.sessionStorage) {
+							sessionStorage.setItem('lastAddedProductType', response.product_type || '');
+						}
 						if (this.cartType == 'page') {
 							document.location.href = KROWN.settings.routes.cart_url;
 							return false;
@@ -675,7 +678,6 @@ if (typeof ProductRecommendations !== 'function') {
 	}
 
 }
-
 /* ---
 	Gift card recipent
 --- */
