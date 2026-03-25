@@ -626,7 +626,7 @@ if (typeof ProductForm !== 'function') {
 
 window._filterRecommendationsByType = function(type) {
 	if (!type) return;
-	document.querySelectorAll('product-recommendations [data-product-type]').forEach(function(item) {
+	document.querySelectorAll('product-recommendations [data-product-type], cart-recommendations [data-product-type]').forEach(function(item) {
 		if (item.dataset.productType.toLowerCase() === type.toLowerCase()) {
 			item.remove();
 		}
