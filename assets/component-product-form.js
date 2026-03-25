@@ -521,13 +521,6 @@ if (typeof ProductForm !== 'function') {
 						}
 						return fetch('?section_id=helper-cart');
 					} else {
-						const addedType = response.product_type || '';
-						if (window.sessionStorage) {
-							sessionStorage.setItem('lastAddedProductType', addedType);
-						}
-						if (addedType) {
-							window._filterRecommendationsByType && window._filterRecommendationsByType(addedType);
-						}
 						if (this.cartType == 'page') {
 							document.location.href = KROWN.settings.routes.cart_url;
 							return false;
@@ -621,46 +614,6 @@ if (typeof ProductForm !== 'function') {
 }
 
 /* ---
-	Filter recommendations helper
---- */
-
-window._filterRecommendationsByType = function(type) {
-	if (!type) return;
-	document.querySelectorAll('product-recommendations [data-product-type], cart-recommendations [data-product-type]').forEach(function(item) {
-		if (item.dataset.productType.toLowerCase() === type.toLowerCase()) {
-			item.remove();
-		}
-	});
-};
-
-// Intercept product-form-w3 (main product page form, not a custom element)
-document.addEventListener('submit', function(e) {
-	const form = e.target;
-	if (!form || form.tagName !== 'FORM') return;
-	const wrapper = form.closest('[data-ajax-cart]');
-	if (!wrapper || wrapper.tagName.toLowerCase() === 'product-form') return;
-	const idInput = form.querySelector('input[name="id"]');
-	if (!idInput) return;
-	e.preventDefault();
-	const body = new URLSearchParams(new FormData(form)).toString();
-	fetch('/cart/add.js', {
-		body,
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
-		method: 'POST'
-	})
-		.then(function(r) { return r.json(); })
-		.then(function(response) {
-			if (response.status === 422) return;
-			const addedType = response.product_type || '';
-			if (window.sessionStorage) sessionStorage.setItem('lastAddedProductType', addedType);
-			if (addedType) window._filterRecommendationsByType(addedType);
-			const addedEvent = new Event('add-to-cart', { bubbles: true });
-			wrapper.dispatchEvent(addedEvent);
-		})
-		.catch(function() {});
-}, true);
-
-/* ---
 	Product Recommendations
 --- */
 
@@ -688,16 +641,6 @@ if (typeof ProductRecommendations !== 'function') {
 
 						if (innerHTML && innerHTML.querySelectorAll('[data-js-product-item]').length > 0) {
 							this.innerHTML = innerHTML.innerHTML;
-							const lastType = (window.sessionStorage && sessionStorage.getItem('lastAddedProductType')) || '';
-							if (lastType) {
-								this.querySelectorAll('[data-product-type]').forEach(item => {
-									if (item.dataset.productType.toLowerCase() === lastType.toLowerCase()) {
-										item.remove();
-									}
-								});
-							}
-							// clear stored type so subsequent page visits don't carry over the filter
-							if (window.sessionStorage) sessionStorage.removeItem('lastAddedProductType');
 							this.querySelectorAll('form').forEach(elm => {
 								if (elm.querySelector('template')) {
 									elm.append(elm.querySelector('template').content.cloneNode(true));
