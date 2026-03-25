@@ -614,85 +614,59 @@ if (typeof ProductForm !== 'function') {
 }
 
 /* ---
-    Product Recommendations
-  --- */
+	Product Recommendations
+--- */
 
-  if (typeof ProductRecommendations !== 'function') {
-    class ProductRecommendations extends HTMLElement {
+if (typeof ProductRecommendations !== 'function') {
+	class ProductRecommendations extends HTMLElement {
 
-      constructor() {
-        super();
+		constructor() {
 
-        const SUCCESS = new Event('product-recommendations-loaded');
-        const FAIL = new Event('product-recommendations-error');
+			super();
 
-        const handleIntersection = (entries, observer) => {
-          if (!entries[0].isIntersecting) return;
-          observer.unobserve(this);
+			const SUCCESS = new Event('product-recommendations-loaded');
+			const FAIL = new Event('product-recommendations-error');
 
-          fetch(`${this.dataset.url}&product_id=${this.dataset.productId}&section_id=${this.dataset.sectionId}`)
-            .then(response => response.text())
-            .then(text => {
-              const innerHTML = new DOMParser()
-                .parseFromString(text, 'text/html')
-                .querySelector('product-recommendations');
+			const handleIntersection = (entries, observer) => {
 
-              if (innerHTML && innerHTML.querySelectorAll('.grid__item').length > 0) {
-                this.innerHTML = innerHTML.innerHTML;
-                this.querySelectorAll('form').forEach(elm => {
-                  if (elm.querySelector('template')) {
-                    elm.append(elm.querySelector('template').content.cloneNode(true));
-                  }
-                });
-                this.filterByExcludedType();
-                this.dispatchEvent(SUCCESS);
-              } else {
-                this.dispatchEvent(FAIL);
-              }
-            })
-            .catch(() => {
-              this.dispatchEvent(FAIL);
-            });
-        };
+				if (!entries[0].isIntersecting) return;
+				observer.unobserve(this);
 
-        new IntersectionObserver(handleIntersection.bind(this), { rootMargin: '0px 0px 400px 0px' }).observe(this);
-      }
+				fetch(this.dataset.url)
+					.then(response => response.text())
+					.then(text => {
+						const innerHTML = new DOMParser()
+							.parseFromString(text, 'text/html')
+							.querySelector('product-recommendations');
 
-      connectedCallback() {
-        const subscribe_cart = () => {
-          if (typeof subscribe !== 'undefined' && typeof PUB_SUB_EVENTS !== 'undefined') {
-            this._cartUnsub = subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
-              if (event.source === 'product-form' && event.cartData?.product_type) {
-                sessionStorage.setItem('excludedProductType', event.cartData.product_type);
-                this.filterByExcludedType();
-              }
-            });
-          }
-        };
-        if (document.readyState === 'complete') {
-          subscribe_cart();
-        } else {
-          window.addEventListener('load', subscribe_cart, { once: true });
-        }
-      }
+						if (innerHTML && innerHTML.querySelectorAll('[data-js-product-item]').length > 0) {
+							this.innerHTML = innerHTML.innerHTML;
+							this.querySelectorAll('form').forEach(elm => {
+								if (elm.querySelector('template')) {
+									elm.append(elm.querySelector('template').content.cloneNode(true));
+								}
+							});
+							this.dispatchEvent(SUCCESS);
+						} else {
+							this.dispatchEvent(FAIL);
+						}
+					})
+					.catch(e => {
+						this.dispatchEvent(FAIL);
+					});
+			}
 
-      disconnectedCallback() {
-        this._cartUnsub?.();
-      }
+			new IntersectionObserver(handleIntersection.bind(this), { rootMargin: `0px 0px 400px 0px` }).observe(this);
 
-      filterByExcludedType() {
-        const excluded = sessionStorage.getItem('excludedProductType');
-        if (!excluded) return;
-        this.querySelectorAll('[data-product-type]').forEach(item => {
-          item.style.display = item.dataset.productType === excluded ? 'none' : '';
-        });
-      }
-    }
+		}
 
-    if (typeof customElements.get('product-recommendations') === 'undefined') {
-      customElements.define('product-recommendations', ProductRecommendations);
-    }
-  }
+	}
+
+	if (typeof customElements.get('product-recommendations') == 'undefined') {
+		customElements.define('product-recommendations', ProductRecommendations);
+	}
+
+}
 
 /* ---
 	Gift card recipent
