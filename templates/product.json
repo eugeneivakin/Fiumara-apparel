@@ -53,7 +53,7 @@
             "quantity_heading": "NUMBER of units:",
             "show_quantity_selector": true,
             "show_preorder": false,
-            "show_dynamic_checkout": true,
+            "show_dynamic_checkout": false,
             "show_gift_card_recipient": false,
             "image": "shopify://shop_images/Frame_1000003003.png",
             "btn_bg_color": "#bb2826",
