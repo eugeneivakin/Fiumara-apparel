@@ -159,6 +159,10 @@
       "results_for_html": {
         "one": "{{ count }} result for <strong>\"{{ terms }}\"</strong>",
         "other": "{{ count }} results for <strong>\"{{ terms }}\"</strong>"
+      },
+      "results_for": {
+        "one": "{{ count }} result for \"{{ terms }}\"",
+        "other": "{{ count }} results for \"{{ terms }}\""
       }
     },
     "paginate": {
