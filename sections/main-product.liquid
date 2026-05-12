@@ -603,6 +603,10 @@
                           id="pdp_main_add_to_cart_button"
                           class=" product__add-to-cart js-click-from-sticky-button product--add-to-cart-button button button--outline {% unless current_variant.available %} disabled {% endunless %}"
                           data-js-product-add-to-cart
+                          {% unless current_variant.available %}
+                            disabled
+                            tabindex="-1"
+                          {% endunless %}
                         >
                           <span
                             class="button-scroll-in add-to-cart__text add-to-cart__text"
