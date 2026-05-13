@@ -604,8 +604,9 @@
                           class=" product__add-to-cart js-click-from-sticky-button product--add-to-cart-button button button--outline {% unless current_variant.available %} disabled {% endunless %}"
                           data-js-product-add-to-cart
                           {% unless current_variant.available %}
-                            disabled
+                            disabled="disabled"
                             tabindex="-1"
+                            aria-disabled="true"
                           {% endunless %}
                         >
                           <span
